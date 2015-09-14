@@ -98,6 +98,7 @@ void FileRec::createData(string filename){
     afile.close();
     
     
+    
 }
 
 //Transfer record
