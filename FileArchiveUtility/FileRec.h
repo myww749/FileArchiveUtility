@@ -50,9 +50,9 @@ class FileRec{
 		void setFileHash(int fileHash);
 		void setRecentHash(int recentHash);
 		void setRefnumber(int refnumber);
-        void setBlockHashes(int index, int value);
-        void setVersionids(int index, int value);
-        void setComments(int index, string value);
+                void setBlockHashes(int index, int value);
+                void setVersionids(int index, int value);
+                void setComments(int index, string value);
     
 		// Read a file and determines values
 		void createData(string filename);
