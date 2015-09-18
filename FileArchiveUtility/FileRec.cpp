@@ -95,6 +95,14 @@ void FileRec::createData(string filename){
     
     setLength(length);
     
+    std::hash<std::string> hash_fn;
+    
+    int hash = hash_fn(length);
+    
+    string fileHash = std::to_string(hash);
+    
+    setFileHash(fileHash);
+    
     afile.close();
     
     
