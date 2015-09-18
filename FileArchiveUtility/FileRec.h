@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
+#include <time.h>
 
 using namespace std;
 
@@ -19,7 +19,7 @@ class FileRec{
 	private:
 		string filename;
 		string tempname;
-                struct timespec modifyTime;
+                timespec modifyTime;
 		int length;
 		int version;
 		int fileHash;
@@ -30,11 +30,13 @@ class FileRec{
 		vector<string> comments;
 
 	public:
+                //Constructor
                 FileRec FileRec(){};
-		//Accessors
-
+		
+                //Accessors
 		string getFileName();
 		string getTempname();
+                timespec getModiftyTime();
 		int getLength();
 		int getVersion();
 		int getFileHash();
@@ -47,6 +49,7 @@ class FileRec{
 		//Mutator
 		void setFileName(string filename);
 		void setTempname(string tempname);
+                void setModiftyTime();
 		void setLength(int length);
 		void setVersion(int version);
 		void setFileHash(int fileHash);

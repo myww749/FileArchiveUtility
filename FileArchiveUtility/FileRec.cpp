@@ -9,6 +9,9 @@ string FileRec::getFileName(){
 string FileRec::getTempname(){
     return this->tempname;
 }
+timespec FileRec::getModiftyTime(){
+    return this->modifyTime;
+}
 
 int FileRec::getLength(){
     return this->length;
@@ -29,12 +32,15 @@ int FileRec::getRecentHash(){
 int FileRec::getRefnumber(){
     return this->refnumber;
 }
+
 int FileRec::getBlockHashes(int index){
     return this->blockhashes.at(index);
 }
+
 int FileRec::getVersionids(int index){
     return this->versionids.at(index);
 }
+
 string FileRec::getComments(int index){
     return this->comments.at(index);
 }
@@ -46,6 +52,13 @@ void FileRec::setFileName(string filename){
 
 void FileRec::setTempname(string tempname){
     this->tempname = tempname;
+}
+
+void FileRec::setModiftyTime(){
+    
+    //This function only work on Linux
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &this->modifyTime);
+    
 }
 
 void FileRec::setLength(int length){
