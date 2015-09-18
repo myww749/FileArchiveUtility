@@ -18,6 +18,7 @@ class FileRec{
 	private:
 		string filename;
 		string tempname;
+                struct timespec modifyTime;
 		int length;
 		int version;
 		int fileHash;
@@ -60,9 +61,6 @@ class FileRec{
 		//Transfer record
 		void transferRec();
 };
-
-
-
 
 #endif	/* FILEREC_H */
 
