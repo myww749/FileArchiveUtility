@@ -29,7 +29,7 @@ class FileRec{
 		vector<string> comments;
 
 	public:
-
+                FileRec FileRec(){};
 		//Accessors
 
 		string getFileName();
