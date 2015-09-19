@@ -14,6 +14,12 @@
 
 using namespace std;
 
+
+/*
+ * Interacts heavily with the database, creating and modifying versions of files
+ * and updating the database according making use of the FileRec class to represent
+ * version of files.
+ */
 class FileArchiver {
 public:
     FileArchiver();
