@@ -44,7 +44,7 @@ public:
     void update(string filename, string comment);
     
     /*
-     * Simple retrieves are version of a file using the specified index.
+     * Simply retrieves a version of a file using the specified index.
      */
     void retrieveVersion(int versionnum, string filename, string retrievetofilename);
     
@@ -57,7 +57,7 @@ public:
     void getHashOfLastSaved(string filename);
     
     /*
-     * Simple gets the comment for the specific version.
+     * Simply gets the comment for the specific version.
      */
     bool getComment(string filename, int versionnum);
     // vector<int> getVersionInfo(string filename);
