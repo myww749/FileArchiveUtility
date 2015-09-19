@@ -17,16 +17,62 @@ using namespace std;
 class FileArchiver {
 public:
     FileArchiver();
+    
+    /*
+     * Checks whether or not the file being added differs from
+     * the most recently added file already in the database.
+     */
     bool differs(string filename);
+    
+    /*
+     * Checks if the file already exists in the database.
+     */
     bool exists(string filename);
+    
+    /*
+     * Creates a new inital archived record and, adds all inital information
+     * and stored the reference file (original blob data) and creates the hash.
+     * This is all sent to the database.
+     */
     void insertNew(string filename, string comment);
+    
+    /*
+     * Does effectively the same thing as insertNew all though it checks
+     * if the file as not changed first and creates a new hash and set the most recent
+     * version of the file.
+     */
     void update(string filename, string comment);
+    
+    /*
+     * Simple retrieves are version of a file using the specified index.
+     */
     void retrieveVersion(int versionnum, string filename, string retrievetofilename);
+    
+    
     void getCurrentVersionNumber(string filename);
+    
+    /*
+     * Goes to the database and collects the value curhash from the filerec in question.
+     */
     void getHashOfLastSaved(string filename);
+    
+    /*
+     * Simple gets the comment for the specific version.
+     */
     bool getComment(string filename, int versionnum);
     // vector<int> getVersionInfo(string filename);
+    
+    /*
+     * The reference is the original version of the file first uploaded.
+     * This reads the file and sets the reference which is stored as the version at
+     * index 0 in the database.
+     */
     void setReference(string filename, int versionnum, string comment);
+    
+    /*
+     * Compresses the file data before storage to reduce footprint.
+     */
+    void createZipFile(string filename);
     virtual ~FileArchiver();
 private:
     
