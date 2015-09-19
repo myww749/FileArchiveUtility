@@ -14,7 +14,6 @@
 
 using namespace std;
 
-
 /*
  * Interacts heavily with the database, creating and modifying versions of files
  * and updating the database according making use of the FileRec class to represent
@@ -66,7 +65,11 @@ public:
      * Simply gets the comment for the specific version.
      */
     bool getComment(string filename, int versionnum);
-    // vector<int> getVersionInfo(string filename);
+    
+    /*
+     * Returns a vector list of all the indexes of a file.
+     */
+    vector<int> getVersionInfo(string filename);
     
     /*
      * The reference is the original version of the file first uploaded.

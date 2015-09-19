@@ -43,9 +43,9 @@ bool FileArchiver::getComment(string filename, int versionnum) {
     
 }
 
-/* vector<int> getVersionInfo(string filename) {
+vector<int> FileArchiver::getVersionInfo(string filename) {
     
-}*/
+}
 
 void FileArchiver::setReference(string filename, int versionnum, string comment) {
     
