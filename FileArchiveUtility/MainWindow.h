@@ -15,8 +15,16 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow();
     virtual ~MainWindow();
+    public slots:
+        void fileSelection();
+        void saveFile();
+        void selectedEntry();
+        void showComments();
+        void retrieveCopy();
+        bool setAsReference();
 private:
     Ui::MainWindow widget;
+    FileArchiver file;
 };
 
 #endif	/* _MAINWINDOW_H */
