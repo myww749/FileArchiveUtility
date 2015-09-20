@@ -4,6 +4,8 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>FileArchiver.h</itemPath>
+      <itemPath>FileRec.h</itemPath>
       <itemPath>MainWindow.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -14,6 +16,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>FileArchiver.cpp</itemPath>
+      <itemPath>FileRec.cpp</itemPath>
       <itemPath>MainWindow.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -42,6 +46,27 @@
       </qt>
       <compileType>
       </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <additionalOptions>-v
+</additionalOptions>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+        </packFileList>
+      </packaging>
+      <item path="FileArchiver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FileArchiver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FileRec.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FileRec.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="MainWindow.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MainWindow.h" ex="false" tool="3" flavor2="0">
@@ -75,6 +100,14 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="FileArchiver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FileArchiver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FileRec.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FileRec.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="MainWindow.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MainWindow.h" ex="false" tool="3" flavor2="0">
