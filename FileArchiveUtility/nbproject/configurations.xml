@@ -46,6 +46,18 @@
         <modules>core gui widgets</modules>
       </qt>
       <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>/usr/local/opt/sqlite/include/sqlite3.h</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibLibItem>sqlite3.0</linkerLibLibItem>
+            <linkerLibLibItem>sqlite3</linkerLibLibItem>
+            <linkerLibLibItem>sqlite3</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
       <packaging>
         <packType>Tar</packType>

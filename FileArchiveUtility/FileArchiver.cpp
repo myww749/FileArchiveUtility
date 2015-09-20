@@ -33,8 +33,6 @@ bool FileArchiver::exists(string filename) {
 
 void FileArchiver::insertNew(string filename, string comment) {
     
-
-    
 }
 
 void FileArchiver::update(string filename, string comment) {

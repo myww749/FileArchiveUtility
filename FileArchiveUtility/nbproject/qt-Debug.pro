@@ -20,5 +20,5 @@ UI_DIR =
 QMAKE_CC = gcc
 QMAKE_CXX = g++
 DEFINES += 
-INCLUDEPATH += 
-LIBS += 
+INCLUDEPATH += /usr/local/opt/sqlite/include/sqlite3.h 
+LIBS += -lsqlite3.0 -lsqlite3 -lsqlite3  
