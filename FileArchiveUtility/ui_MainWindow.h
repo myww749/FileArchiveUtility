@@ -1,7 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created: Sun Sep 20 21:45:49 2015
+**      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -67,23 +68,23 @@ public:
         saveCurrent = new QPushButton(centralwidget);
         saveCurrent->setObjectName(QString::fromUtf8("saveCurrent"));
         saveCurrent->setEnabled(false);
-        saveCurrent->setGeometry(QRect(550, 130, 111, 27));
+        saveCurrent->setGeometry(QRect(550, 130, 131, 27));
         retrieveVersion = new QPushButton(centralwidget);
         retrieveVersion->setObjectName(QString::fromUtf8("retrieveVersion"));
         retrieveVersion->setEnabled(false);
-        retrieveVersion->setGeometry(QRect(550, 170, 111, 27));
+        retrieveVersion->setGeometry(QRect(550, 170, 131, 27));
         setReference = new QPushButton(centralwidget);
         setReference->setObjectName(QString::fromUtf8("setReference"));
         setReference->setEnabled(false);
-        setReference->setGeometry(QRect(550, 210, 111, 27));
+        setReference->setGeometry(QRect(550, 210, 131, 27));
         showComment = new QPushButton(centralwidget);
         showComment->setObjectName(QString::fromUtf8("showComment"));
         showComment->setEnabled(false);
-        showComment->setGeometry(QRect(550, 250, 111, 27));
+        showComment->setGeometry(QRect(550, 250, 131, 27));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 23));
+        menubar->setGeometry(QRect(0, 0, 800, 22));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));

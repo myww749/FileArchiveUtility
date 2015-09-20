@@ -9,8 +9,11 @@
 #define	FILEARCHIVER_H
 
 #include <iostream>
+#include <stdio.h>
 #include <string>
 #include <vector>
+#include <sqlite3.h>
+#include "constants.h"
 
 using namespace std;
 
@@ -20,7 +23,7 @@ using namespace std;
  * version of files.
  */
 class FileArchiver {
-public:
+public:    
     FileArchiver();
     
     /*
@@ -84,7 +87,8 @@ public:
     void createZipFile(string filename);
     virtual ~FileArchiver();
 private:
-    
+    int rc;
+    sqlite3 *database;
 };
 
 #endif	/* FILEARCHIVER_H */
