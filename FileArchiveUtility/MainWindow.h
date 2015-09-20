@@ -16,12 +16,14 @@ public:
     MainWindow();
     virtual ~MainWindow();
     public slots:
-        void fileSelection();
-        void saveFile();
-        void selectedEntry();
-        void showComments();
-        void retrieveCopy();
-        bool setAsReference();
+        void selectFile();
+        void retrieveVersionData();
+        void createFirstVersion();
+        void saveCurrent();
+        void selectEntry();
+        bool showComment();
+        bool retrieveVersion();
+        void setReferenceVersion();
 private:
     Ui::MainWindow widget;
     FileArchiver file;
