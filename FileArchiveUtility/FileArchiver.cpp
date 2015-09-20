@@ -18,7 +18,7 @@ FileArchiver::FileArchiver() {
     } else {
         cout << "Successful connection." << endl;
     }
-    
+
     
     
 }
