@@ -4,6 +4,7 @@
 * Requires the right libraries
   * Qt, uses system gzip command, sqlite3
   * 
+
 ## Using git
 
 Be careful about which branch you are working in and committing to, it was sometimes hard to tell if I was in the right branch locally.
