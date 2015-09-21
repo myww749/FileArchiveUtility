@@ -95,7 +95,7 @@ void FileRec::setComments(int index, string value){
 
 // Read a file and determines values
 void FileRec::createData(string filename){
-    /*
+    
     ifstream afile(filename);
     
     afile.seekg(0,afile.end);
@@ -117,7 +117,7 @@ void FileRec::createData(string filename){
     setFileHash(fileHash);
     
     afile.close();
-    */
+    
     
 }
 

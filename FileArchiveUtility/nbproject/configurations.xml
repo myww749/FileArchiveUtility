@@ -48,6 +48,7 @@
       </qt>
       <compileType>
         <ccTool>
+          <standard>8</standard>
           <incDir>
             <pElem>/usr/local/opt/sqlite/include/sqlite3.h</pElem>
           </incDir>
