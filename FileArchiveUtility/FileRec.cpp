@@ -57,7 +57,7 @@ void FileRec::setTempname(string tempname){
 void FileRec::setModiftyTime(){
     
     //This function only work on Linux
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &this->modifyTime);
+    //clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &this->modifyTime);
     
 }
 
@@ -95,10 +95,11 @@ void FileRec::setComments(int index, string value){
 
 // Read a file and determines values
 void FileRec::createData(string filename){
+
     
     //Create a char pointer to read in the file
     char* fileContents;
-    
+
     //Open the file for read
     ifstream afile(filename,ios::in | ios::binary | ios::ate);
     

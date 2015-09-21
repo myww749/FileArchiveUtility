@@ -9,14 +9,25 @@
 #define	_MAINWINDOW_H
 
 #include "ui_MainWindow.h"
+#include "FileArchiver.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
     MainWindow();
     virtual ~MainWindow();
+    public slots:
+        void selectFile();
+        void retrieveVersionData();
+        void createFirstVersion();
+        void saveCurrent();
+        void selectEntry();
+        bool showComment();
+        bool retrieveVersion();
+        void setReferenceVersion();
 private:
     Ui::MainWindow widget;
+    FileArchiver file;
 };
 
 #endif	/* _MAINWINDOW_H */

@@ -11,7 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <time.h>
+// #include <time.h>
 
 using namespace std;
 
@@ -31,7 +31,7 @@ class FileRec{
 
 	public:
                 //Constructor
-                FileRec FileRec(){};
+                FileRec(){};
 		
                 //Accessors
 		string getFileName();

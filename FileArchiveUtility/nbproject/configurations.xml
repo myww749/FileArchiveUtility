@@ -7,6 +7,7 @@
       <itemPath>FileArchiver.h</itemPath>
       <itemPath>FileRec.h</itemPath>
       <itemPath>MainWindow.h</itemPath>
+      <itemPath>constants.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -45,6 +46,18 @@
         <modules>core gui widgets</modules>
       </qt>
       <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>/usr/local/opt/sqlite/include/sqlite3.h</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibLibItem>sqlite3.0</linkerLibLibItem>
+            <linkerLibLibItem>sqlite3</linkerLibLibItem>
+            <linkerLibLibItem>sqlite3</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
       <packaging>
         <packType>Tar</packType>
@@ -72,6 +85,8 @@
       <item path="MainWindow.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MainWindow.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="constants.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -113,6 +128,8 @@
       <item path="MainWindow.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MainWindow.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="constants.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

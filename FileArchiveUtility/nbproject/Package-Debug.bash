@@ -6,11 +6,11 @@
 
 # Macros
 TOP=`pwd`
-CND_PLATFORM=GNU-Linux-x86
+CND_PLATFORM=GNU-MacOSX
 CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build
-CND_DLIB_EXT=so
+CND_DLIB_EXT=dylib
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
 OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/FileArchiveUtility
@@ -68,7 +68,8 @@ copyFileToTmpDir "${OUTPUT_PATH}" "${NBTMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BA
 cd "${TOP}"
 rm -f ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FileArchiveUtility.tar
 cd ${NBTMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FileArchiveUtility.tar *
+tar -v
+cf ../../../../${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FileArchiveUtility.tar *
 checkReturnCode
 
 # Cleanup
