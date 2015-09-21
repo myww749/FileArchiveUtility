@@ -9,6 +9,8 @@
 
 FileArchiver::FileArchiver() {
     
+    char* errMsg = 0;
+    
     // create the sql connection
     rc = sqlite3_open(DATABASE_FILE, &this->database);
     
@@ -19,7 +21,14 @@ FileArchiver::FileArchiver() {
         cout << "Successful connection." << endl;
     }
     
+    rc = sqlite3_exec(database, TEST_SQL, NULL, 0, &errMsg);
     
+    if ( rc == SQLITE_OK ) {
+        sqlite3_free(errMsg);
+        cout << "table created." << endl;
+    } else {
+        cerr << "SQL statement execution, something went wrong" << endl;
+    }
     
 }
 
