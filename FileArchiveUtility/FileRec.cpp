@@ -96,25 +96,49 @@ void FileRec::setComments(int index, string value){
 // Read a file and determines values
 void FileRec::createData(string filename){
     
-    ifstream afile(filename);
+    //Create a char pointer to read in the file
+    char* fileContents;
     
+    //Open the file for read
+    ifstream afile(filename,ios::in | ios::binary | ios::ate);
+    
+    //Find the size of the file
     afile.seekg(0,afile.end);
     
     int length = afile.tellg();
     
     afile.seekg(0, afile.beg);
     
+    //Set the name and the length of the file
     setFileName(filename);
     
     setLength(length);
+       
+    if(afile.is_open()){
+        
+        //Allocate the memory for char[]
+        fileContents = new char[length];
+        
+        //The the contents
+        if(!afile.read(fileContents,length))
+        {
+            cout<<"Fail to read"<<endl;
+        }
+        
+    }
     
-    std::hash<std::string> hash_fn;
+    //convert the char* to string 
+    string tempContent(fileContents,length);
+    stringstream str(tempContent);
     
-    int hash = hash_fn(length);
+    int hash;
     
-    string fileHash = std::to_string(hash);
+    hash<std::string> hash_fn;
     
-    setFileHash(fileHash);
+    //Hash the content to integer
+    hash = hash_fn(str);
+    
+    setRecentHash(hash);
     
     afile.close();
     
