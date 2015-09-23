@@ -19,7 +19,7 @@ CCC=g++
 CXX=g++
 FC=gfortran
 AS=as
-QMAKE=qmake-4.8
+QMAKE=qmake
 
 # Macros
 CND_PLATFORM=GNU-MacOSX

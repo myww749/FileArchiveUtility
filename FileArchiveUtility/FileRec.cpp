@@ -54,11 +54,9 @@ void FileRec::setTempname(string tempname){
     this->tempname = tempname;
 }
 
-void FileRec::setModiftyTime(){
+void FileRec::setModiftyTime(time_t time){
     
-    //This function only work on Linux
-    //clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &this->modifyTime);
-    
+    this->modifyTime = time;
 }
 
 void FileRec::setLength(int length){
@@ -95,7 +93,6 @@ void FileRec::setComments(int index, string value){
 
 // Read a file and determines values
 void FileRec::createData(string filename){
-
     
     //Create a char pointer to read in the file
     char* fileContents;
@@ -110,11 +107,31 @@ void FileRec::createData(string filename){
     
     afile.seekg(0, afile.beg);
     
+    string temp("temp");
+    
     //Set the name and the length of the file
     setFileName(filename);
     
+    filename += temp;
+    
+    setTempname(filename);
+    
     setLength(length);
-       
+    
+    
+    //Set the modify time
+    struct stat STAT;
+    struct utimbuf new_times;
+    
+    if(stat(filename.c_str(), &STAT) <0)
+    {
+        perror(filename.c_str());
+        exit(0);
+    }
+    
+    setModiftyTime(STAT.st_mtime);
+     
+    //Read in the file
     if(afile.is_open()){
         
         //Allocate the memory for char[]
@@ -140,6 +157,7 @@ void FileRec::createData(string filename){
     hash = hash_fn(str);
     
     setRecentHash(hash);
+    
     
     afile.close();
     
