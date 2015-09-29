@@ -12,6 +12,7 @@
 #include <fstream>
 #include <vector>
 #include <time.h>
+#include <string>
 
 using namespace std;
 

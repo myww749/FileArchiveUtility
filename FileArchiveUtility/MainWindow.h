@@ -15,6 +15,7 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow();
     virtual ~MainWindow();
+    
     public slots:
         void selectFile();
         void retrieveVersionData();

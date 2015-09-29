@@ -1,6 +1,6 @@
 
 #include "FileRec.h"
-
+#include <string>
 //Accessors
 string FileRec::getFileName(){
     return this->filename;
