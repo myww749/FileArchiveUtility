@@ -9,6 +9,7 @@
 #define	_MAINWINDOW_H
 
 #include "ui_MainWindow.h"
+#include "FileArchiver.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT

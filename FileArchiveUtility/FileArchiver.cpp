@@ -1,6 +1,6 @@
 /* 
  * File:   FileArchiver.cpp
- * Author: brq
+ * Author: brq415
  * 
  * Created on 14 September 2015, 11:30 AM
  */
@@ -8,6 +8,18 @@
 #include "FileArchiver.h"
 
 FileArchiver::FileArchiver() {
+    
+    // create the sql connection
+    rc = sqlite3_open(DATABASE_FILE, &this->database);
+    
+    if ( rc ) {
+        cerr << "Can not open database file." << sqlite3_errmsg(database) << endl;
+        exit(0);
+    } else {
+        cout << "Successful connection." << endl;
+    }
+
+    
     
 }
 
@@ -56,5 +68,6 @@ void FileArchiver::createZipFile(string filename) {
 }
     
 FileArchiver::~FileArchiver() {
+    sqlite3_close(database);
 }
 

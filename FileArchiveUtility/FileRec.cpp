@@ -54,11 +54,9 @@ void FileRec::setTempname(string tempname){
     this->tempname = tempname;
 }
 
-void FileRec::setModiftyTime(){
+void FileRec::setModiftyTime(time_t time){
     
-    //This function only work on Linux
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &this->modifyTime);
-    
+    this->modifyTime = time;
 }
 
 void FileRec::setLength(int length){
@@ -96,25 +94,70 @@ void FileRec::setComments(int index, string value){
 // Read a file and determines values
 void FileRec::createData(string filename){
     
-    ifstream afile(filename);
+    //Create a char pointer to read in the file
+    char* fileContents;
+
+    //Open the file for read
+    ifstream afile(filename,ios::in | ios::binary | ios::ate);
     
+    //Find the size of the file
     afile.seekg(0,afile.end);
     
     int length = afile.tellg();
     
     afile.seekg(0, afile.beg);
     
+    string temp("temp");
+    
+    //Set the name and the length of the file
     setFileName(filename);
+    
+    filename += temp;
+    
+    setTempname(filename);
     
     setLength(length);
     
-    std::hash<std::string> hash_fn;
     
-    int hash = hash_fn(length);
+    //Set the modify time
+    struct stat STAT;
+    struct utimbuf new_times;
     
-    string fileHash = std::to_string(hash);
+    if(stat(filename.c_str(), &STAT) <0)
+    {
+        perror(filename.c_str());
+        exit(0);
+    }
     
-    setFileHash(fileHash);
+    setModiftyTime(STAT.st_mtime);
+     
+    //Read in the file
+    if(afile.is_open()){
+        
+        //Allocate the memory for char[]
+        fileContents = new char[length];
+        
+        //The the contents
+        if(!afile.read(fileContents,length))
+        {
+            cout<<"Fail to read"<<endl;
+        }
+        
+    }
+    
+    //convert the char* to string 
+    string tempContent(fileContents,length);
+    stringstream str(tempContent);
+    
+    int hash;
+    
+    hash<std::string> hash_fn;
+    
+    //Hash the content to integer
+    hash = hash_fn(str);
+    
+    setRecentHash(hash);
+    
     
     afile.close();
     

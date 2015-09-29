@@ -6,6 +6,7 @@
  */
 
 #include <QApplication>
+#include "MainWindow.h"
 
 int main(int argc, char *argv[]) {
     // initialize resources, if needed
@@ -14,6 +15,8 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     // create and show your widgets here
+    MainWindow window;
+    window.show();
 
     return app.exec();
 }
