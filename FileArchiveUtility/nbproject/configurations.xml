@@ -43,6 +43,10 @@
       </toolsSet>
       <qt>
         <modules>core gui widgets</modules>
+        <defs>
+          <Elem>QMAKE_CXXFLAGS += --coverage</Elem>
+          <Elem>QMAKE_LFLAGS += --coverage</Elem>
+        </defs>
       </qt>
       <compileType>
       </compileType>

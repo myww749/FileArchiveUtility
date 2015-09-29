@@ -22,3 +22,5 @@ QMAKE_CXX = g++
 DEFINES += 
 INCLUDEPATH += 
 LIBS += 
+QMAKE_CXXFLAGS += --coverage
+QMAKE_LFLAGS += --coverage
