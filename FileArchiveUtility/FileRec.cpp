@@ -150,6 +150,8 @@ void FileRec::createData(string filename) {
     string tempContent(fileContents, length);
     stringstream str(tempContent);
     
+    // continues to get errors for me (brandon) :(
+    
     /*size_t hash;
     
     //Hash the content to integer
