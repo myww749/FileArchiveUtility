@@ -19,11 +19,11 @@ CCC=g++
 CXX=g++
 FC=gfortran
 AS=as
-QMAKE=qmake-4.8
+QMAKE=qmake
 
 # Macros
-CND_PLATFORM=GNU-MacOSX
-CND_DLIB_EXT=dylib
+CND_PLATFORM=GNU-Linux-x86
+CND_DLIB_EXT=so
 CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -55,7 +55,7 @@ ASFLAGS=
 LDLIBSOPTIONS=-lsqlite3.0 -lsqlite3 -lsqlite3
 
 nbproject/qt-${CND_CONF}.mk: nbproject/qt-${CND_CONF}.pro FORCE
-	${QMAKE} VPATH=. -spec macx-g++ -o qttmp-${CND_CONF}.mk nbproject/qt-${CND_CONF}.pro
+	${QMAKE} VPATH=. -o qttmp-${CND_CONF}.mk nbproject/qt-${CND_CONF}.pro
 	mv -f qttmp-${CND_CONF}.mk nbproject/qt-${CND_CONF}.mk
 
 FORCE:

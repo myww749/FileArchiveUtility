@@ -13,13 +13,20 @@
 #include <vector>
 #include <time.h>
 
+//Modified time
+#include <time.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <utime.h>
+#include <string>
+
 using namespace std;
 
 class FileRec{
 	private:
 		string filename;
 		string tempname;
-                timespec modifyTime;
+                time_t modifyTime;
 		int length;
 		int version;
 		int fileHash;
@@ -36,7 +43,7 @@ class FileRec{
                 //Accessors
 		string getFileName();
 		string getTempname();
-                timespec getModiftyTime();
+                time_t getModiftyTime();
 		int getLength();
 		int getVersion();
 		int getFileHash();
