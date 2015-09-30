@@ -13,7 +13,9 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>CreateTables.sql</itemPath>
       <itemPath>MainWindow.ui</itemPath>
+      <itemPath>persistentstore.db</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -74,6 +76,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="CreateTables.sql" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="FileArchiver.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="FileArchiver.h" ex="false" tool="3" flavor2="0">
@@ -91,6 +95,8 @@
       <item path="constants.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="persistentstore.db" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ui_MainWindow.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -119,6 +125,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="CreateTables.sql" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="FileArchiver.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="FileArchiver.h" ex="false" tool="3" flavor2="0">
@@ -136,6 +144,8 @@
       <item path="constants.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="persistentstore.db" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ui_MainWindow.h" ex="false" tool="3" flavor2="0">
       </item>

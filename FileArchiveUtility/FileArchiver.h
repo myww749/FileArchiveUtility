@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 #include <sqlite3.h>
+#include <stdlib.h>
+#include <fstream>
 #include "constants.h"
 
 using namespace std;
@@ -87,8 +89,11 @@ public:
      * Compresses the file data before storage to reduce footprint.
      */
     void createZipFile(string filename);
+    
     virtual ~FileArchiver();
 private:
+    bool noResults = false; // used in call callback, only use this immediately after calling
+                            // sqlite3_exec and then make sure to reset it to false
     int rc;
     sqlite3 *database;
 };
