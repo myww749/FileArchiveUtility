@@ -59,7 +59,7 @@ public:
     /*
      * searches for the table given filename and gets the most recent version number
      */
-    void getCurrentVersionNumber(string filename);
+    int getCurrentVersionNumber(string filename);
     
     /*
      * Goes to the database and collects the value curhash from the filerec in question.

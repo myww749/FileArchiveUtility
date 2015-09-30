@@ -33,47 +33,65 @@ FileArchiver::FileArchiver() {
 }
 
 bool FileArchiver::differs(string filename) {
+    // get the hash of the revision of the file from the database
     
+    // hash the file being added
+    
+    // check for a difference
+    
+    // return true if there is
 }
 
 bool FileArchiver::exists(string filename) {
-    
+    // check if the file already exists in the database, simply query using the filename
 }
 
 void FileArchiver::insertNew(string filename, string comment) {
+    // check if it exists, if not then create a whole new file with a reference file
     
+    // make sure to compress using gzip
 }
 
 void FileArchiver::update(string filename, string comment) {
+    // this will occurr if the file already exists and there are differences
     
+    // create a new hash and make it the latest and add the changes to the database
+    
+    // make sure to compress changes using gzip
 }
 
 void FileArchiver::retrieveVersion(int versionnum, string filename, string retrievetofilename) {
+    // versionnum is the row index in the database of the file for filename and output it to the 
+    // retrievetofilename
     
+    // make sure to decompress
 }
 
-void FileArchiver::getCurrentVersionNumber(string filename) {
-    
+int FileArchiver::getCurrentVersionNumber(string filename) {
+    // get the last row integer for the filename, that indicate the lastest version
 }
 
 void FileArchiver::getHashOfLastSaved(string filename) {
-    
+    // simply return the hash value of the most recent version of a file
 }
 
 bool FileArchiver::getComment(string filename, int versionnum) {
-    
+    // get the comment stored with the filename at row number versionnum
 }
 
 vector<int> FileArchiver::getVersionInfo(string filename) {
-    
+    // returns all versions of a file as integers
 }
 
 void FileArchiver::setReference(string filename, int versionnum, string comment) {
+    // sets the file which acts as the original
     
+    // file changes are stored later on in compress format and are added on
 }
 
 void FileArchiver::createZipFile(string filename) {
-    
+    // zips the contents of the file as filename.zip so we can read it's bytes
+    // and store it in the database
 }
     
 FileArchiver::~FileArchiver() {

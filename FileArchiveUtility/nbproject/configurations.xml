@@ -52,6 +52,7 @@
           <incDir>
             <pElem>/usr/local/opt/sqlite/include/sqlite3.h</pElem>
           </incDir>
+          <useLinkerLibraries>false</useLinkerLibraries>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
