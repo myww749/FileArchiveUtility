@@ -56,7 +56,9 @@ public:
      */
     void retrieveVersion(int versionnum, string filename, string retrievetofilename);
     
-    
+    /*
+     * searches for the table given filename and gets the most recent version number
+     */
     void getCurrentVersionNumber(string filename);
     
     /*
