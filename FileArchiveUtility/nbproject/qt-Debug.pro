@@ -9,7 +9,7 @@ CONFIG += debug
 PKGCONFIG +=
 QT = core gui widgets
 SOURCES += FileArchiver.cpp FileRec.cpp MainWindow.cpp main.cpp
-HEADERS += FileArchiver.h FileRec.h MainWindow.h constants.h
+HEADERS += FileArchiver.h FileRec.h MainWindow.h constants.h ui_MainWindow.h
 FORMS += MainWindow.ui
 RESOURCES +=
 TRANSLATIONS +=
@@ -22,3 +22,9 @@ QMAKE_CXX = g++
 DEFINES += 
 INCLUDEPATH += /usr/local/opt/sqlite/include/sqlite3.h 
 LIBS += -lsqlite3.0 -lsqlite3 -lsqlite3  
+equals(QT_MAJOR_VERSION, 4) {
+QMAKE_CXXFLAGS += -std=c++11
+}
+equals(QT_MAJOR_VERSION, 5) {
+CONFIG += c++11
+}
