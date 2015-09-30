@@ -6,7 +6,10 @@
  */
 
 #include "FileArchiver.h"
+#include "FileRec.h"
 #include <zlib.h>
+
+using namespace std;
 
 /*
  * Call back function used to handle data result set generator from the execution
@@ -16,6 +19,7 @@
 static int callback(void *data, int argc, char **argv, char **azColName) {
     int i;
     fprintf(stderr, "%s: ", (const char*)data);
+
     for ( i = 0; i < argc; i++ ) {
         printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
     }
@@ -70,7 +74,11 @@ FileArchiver::FileArchiver() {
            cerr << errMsg << endl;
        }        
     } 
+    
+    insertNew("test", "comment");
 }
+
+
 
 bool FileArchiver::differs(string filename) {
     // get the hash of the revision of the file from the database
@@ -84,29 +92,46 @@ bool FileArchiver::differs(string filename) {
 
 bool FileArchiver::exists(string filename) {
     // check if the file already exists in the database, simply query using the filename
-    
-    string query = "SELECT * FROM test;";
+    string query = "SELECT * FROM blobtable;";  // JUST FOR TESTING SO FOR, NEEDS CHANGING
     char *errMsg;
     char *data = "Callback!";   // it looks like the results get stored in data, they dont
     
+    // FIX: always results in an error, crashes
     rc = sqlite3_exec(database, query.c_str(), callback, (void*)data, &errMsg);
 
     if ( rc == SQLITE_OK ) {
         sqlite3_free(errMsg);
     } else {
         cout << "Error, could not complete query in function \"exists\"." << endl;
+        return false;
     }
     
+    // check 
+    if ( hasResults ) {
+        hasResults = false;
+        return true;
+    }
+    
+    return false;
 }
 
 void FileArchiver::insertNew(string filename, string comment) {
     // check if it exists, if not then create a whole new file with a reference file
+    if ( exists(filename) ) {
+        cout << "Database already exists." << endl;
+        return;
+    }
+    
+    FileRec rec;
+    rec.createData(filename);
+    
+    
     
     // make sure to compress using gzip
 }
 
 void FileArchiver::update(string filename, string comment) {
-    // this will occurr if the file already exists and there are differences
+    // this will occur if the file already exists and there are differences
     
     // create a new hash and make it the latest and add the changes to the database
     
