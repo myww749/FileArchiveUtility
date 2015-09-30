@@ -1,6 +1,7 @@
 
 #include "FileRec.h"
-#include <string>
+
+using namespace std;
 
 //Accessors
 string FileRec::getFileName(){
@@ -10,7 +11,7 @@ string FileRec::getFileName(){
 string FileRec::getTempname(){
     return this->tempname;
 }
-timespec FileRec::getModiftyTime(){
+time_t FileRec::getModiftyTime(){
     return this->modifyTime;
 }
 
@@ -55,8 +56,7 @@ void FileRec::setTempname(string tempname){
     this->tempname = tempname;
 }
 
-void FileRec::setModiftyTime(time_t time){
-    
+void FileRec::setModiftyTime(time_t time) {
     this->modifyTime = time;
 }
 
@@ -93,22 +93,20 @@ void FileRec::setComments(int index, string value){
 }
 
 // Read a file and determines values
-void FileRec::createData(string filename){
-    
-    ifstream afile(filename);
-    
+void FileRec::createData(string filename) {
+
     //Create a char pointer to read in the file
     char* fileContents;
 
     //Open the file for read
-    ifstream afile(filename,ios::in | ios::binary | ios::ate);
+    ifstream afile(filename.c_str(), ios::in | ios::binary | ios::ate);
     
     //Find the size of the file
-    afile.seekg(0,afile.end);
+    afile.seekg(0, ios::end);
     
     int length = afile.tellg();
     
-    afile.seekg(0, afile.beg);
+    afile.seekg(0, ios::beg);
     
     string temp("temp");
     
@@ -149,20 +147,18 @@ void FileRec::createData(string filename){
     }
     
     //convert the char* to string 
-    string tempContent(fileContents,length);
+    string tempContent(fileContents, length);
     stringstream str(tempContent);
     
-    int hash;
-    
-    hash<std::string> hash_fn;
+    /*size_t hash;
     
     //Hash the content to integer
-    hash = hash_fn(str);
-    
+    std::hash<std::string> hash_fn;
+ 
+    hash = hash_fn(str.str());
     setRecentHash(hash);
     
-    
-    afile.close();
+    afile.close();/*/
     
     
 }

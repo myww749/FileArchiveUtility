@@ -11,7 +11,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <time.h>
+#include <sstream>
+#include <functional>
 
 //Modified time
 #include <time.h>
@@ -20,29 +21,27 @@
 #include <utime.h>
 #include <string>
 
-using namespace std;
-
 class FileRec{
 	private:
-		string filename;
-		string tempname;
+		std::string filename;
+		std::string tempname;
                 time_t modifyTime;
 		int length;
 		int version;
 		int fileHash;
 		int recentHash;
 		int refnumber;
-		vector<int> blockhashes;
-		vector<int> versionids;
-		vector<string> comments;
+		std::vector<int> blockhashes;
+		std::vector<int> versionids;
+		std::vector<std::string> comments;
 
 	public:
                 //Constructor
                 FileRec(){};
 		
                 //Accessors
-		string getFileName();
-		string getTempname();
+		std::string getFileName();
+		std::string getTempname();
                 time_t getModiftyTime();
 		int getLength();
 		int getVersion();
@@ -51,12 +50,12 @@ class FileRec{
 		int getRefnumber();
                 int getBlockHashes(int index);
                 int getVersionids(int index);
-                string getComments(int index);
+                std::string getComments(int index);
 
 		//Mutator
-		void setFileName(string filename);
-		void setTempname(string tempname);
-                void setModiftyTime();
+		void setFileName(std::string filename);
+		void setTempname(std::string tempname);
+                void setModiftyTime(time_t time);
 		void setLength(int length);
 		void setVersion(int version);
 		void setFileHash(int fileHash);
@@ -64,10 +63,10 @@ class FileRec{
 		void setRefnumber(int refnumber);
                 void setBlockHashes(int index, int value);
                 void setVersionids(int index, int value);
-                void setComments(int index, string value);
+                void setComments(int index, std::string value);
     
 		// Read a file and determines values
-		void createData(string filename);
+		void createData(std::string filename);
 
 		//Transfer record
 		void transferRec();

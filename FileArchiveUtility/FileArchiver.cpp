@@ -6,6 +6,7 @@
  */
 
 #include "FileArchiver.h"
+#include <zlib.h>
 
 FileArchiver::FileArchiver() {
     
@@ -44,6 +45,8 @@ bool FileArchiver::differs(string filename) {
 
 bool FileArchiver::exists(string filename) {
     // check if the file already exists in the database, simply query using the filename
+    
+    string query = "SELECT * WHERE ";
 }
 
 void FileArchiver::insertNew(string filename, string comment) {
