@@ -48,6 +48,7 @@ FileArchiver::FileArchiver() {
             getline(sqlFile, tmp, '\n');
             sqlStatement += tmp + " ";
         }
+        sqlFile.close();
         
         // create the sql connection
        rc = sqlite3_open(DATABASE_FILE, &this->database);
@@ -59,8 +60,6 @@ FileArchiver::FileArchiver() {
            cout << "Successful connection." << endl;
        }
 
-
-       cout << sqlStatement << endl;
        rc = sqlite3_exec(database, sqlStatement.c_str(), NULL, 0, &errMsg);
 
        if ( rc == SQLITE_OK ) {
@@ -69,13 +68,8 @@ FileArchiver::FileArchiver() {
        } else {
            cerr << "SQL statement execution, something went wrong, likely the statement could \n not run because the table exists." << endl;
            cerr << errMsg << endl;
-       }
-    
-           
-    }
-    
-
-    
+       }        
+    } 
 }
 
 bool FileArchiver::differs(string filename) {
