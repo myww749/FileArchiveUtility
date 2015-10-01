@@ -119,6 +119,7 @@ bool FileArchiver::exists(string filename) {
 void FileArchiver::insertNew(string filename, string comment) {
     
     timespec* ts = new timespec();
+    string tmpZipFileName = (filename + ".zip");
     
     // first check if the file exists, it would suck if it didn't
     fstream checkExists(filename.c_str(), fstream::in);
@@ -158,11 +159,15 @@ void FileArchiver::insertNew(string filename, string comment) {
     
     currentRecord.setModiftyTime(*ts);
     
-    delete ts;
+    delete ts; /* Cleaning your house while your kids are still growing up 
+                * is like shoveling the walk before it stops snowing.
+                *    - Phyllis Diller
+                */
+    
     // create a tmp file on disk that is the compressed version of the file
     // being added, this will contain the data to be added to the blob field
     ifstream inFile(filename.c_str(), fstream::binary);
-    gzFile outFile = gzopen((filename + ".zip").c_str(), "wb");
+    gzFile outFile = gzopen(tmpZipFileName.c_str(), "wb");
     
     // again check files
     if ( !inFile.good() || !outFile) {
@@ -181,8 +186,38 @@ void FileArchiver::insertNew(string filename, string comment) {
     inFile.close();
     gzclose(outFile);
     
-    // now grab all that compresses goodness and send it on it's way to the db
+    // now grab all that compressed goodness and send it on it's way to the db
+    char* compressedData;
+    ifstream tmpZipFile(tmpZipFileName.c_str(), fstream::in | fstream::binary);
     
+    if ( !tmpZipFile.good() ) {
+        cerr << "Tmp zip file not found";
+        return;
+    }
+    
+    // FIX: Doesn't work properly
+    compressedData = new char[1024];
+    while ( !tmpZipFile.eof() ) {
+        tmpZipFile.read(compressedData, BUFFER_SIZE);
+        
+        // resize compressedFile
+        char* tmpCDat = new char[strlen(compressedData)];
+        strcpy(tmpCDat, compressedData);
+        delete[] compressedData;
+        compressedData = new char[strlen(tmpCDat) + BUFFER_SIZE];
+        strcpy(compressedData, tmpCDat);
+        delete[] tmpCDat;
+    }
+    
+    cout << compressedData << endl;
+    
+    // delete the temporary zip file
+    
+    // convert timespec in FileRec to something storable in database
+    
+    // update database
+    
+    // make sure memory is clear
 }
 
 void FileArchiver::update(string filename, string comment) {
