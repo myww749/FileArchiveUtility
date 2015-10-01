@@ -31,8 +31,8 @@ My sqlite3 installing was in /usr/local/opt/sqlite and in there, there was the l
 If not installed install homebrew package manager.
 
 Then run these commands:
-brew tap homebrew/dupes
-brew install zlib
-brew list zlib
+brew tap homebrew/dupes <br>
+brew install zlib <br>
+brew list zlib <br>
 
 The last command will tell you where the includes and library files are, add them to the netbeans properties for linker and compiler then include <zlib.h>
