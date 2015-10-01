@@ -21,12 +21,20 @@
 #include <utime.h>
 #include <string>
 
+// check if on apple system, apple doesn't support clock_gettime
+// also doesn't properly support hash<key> (for brandon :().
+#ifdef __APPLE__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#include <ext/hash_map>
+#endif
+
 class FileRec{
 	private:
 		std::string filename;
 		std::string tempname;
-                time_t modifyTime;
-		int length;
+                timespec modifyTime;
+                int length;
 		int version;
 		int fileHash;
 		int recentHash;
@@ -42,7 +50,7 @@ class FileRec{
                 //Accessors
 		std::string getFileName();
 		std::string getTempname();
-                time_t getModiftyTime();
+                timespec getModiftyTime();
 		int getLength();
 		int getVersion();
 		int getFileHash();
@@ -55,7 +63,7 @@ class FileRec{
 		//Mutator
 		void setFileName(std::string filename);
 		void setTempname(std::string tempname);
-                void setModiftyTime(time_t time);
+                void setModiftyTime(timespec time);
 		void setLength(int length);
 		void setVersion(int version);
 		void setFileHash(int fileHash);

@@ -28,7 +28,7 @@ public:
         void setReferenceVersion();
 private:
     Ui::MainWindow widget;
-    FileArchiver file;
+    FileArchiver fileArchiver;
 };
 
 #endif	/* _MAINWINDOW_H */

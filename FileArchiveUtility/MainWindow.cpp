@@ -8,6 +8,7 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow() {
+    
     widget.setupUi(this);
 }
 
@@ -21,6 +22,12 @@ void MainWindow::selectFile(){
     //Else
         //createFirstVersion())
     
+    if ( fileArchiver.exists(widget.fileLocation->text().toStdString()) ) {
+        // Load the data from the database.
+    } else {
+        // Create a new FileRec that will store new data
+        // this will use FileArchiver::insertNew
+    }
 }
 
 void MainWindow::retrieveVersionData(){
@@ -30,9 +37,7 @@ void MainWindow::retrieveVersionData(){
     //Populate table
     //Adjust display
     
-};
-
-
+}
 
 void MainWindow::createFirstVersion(){
     
@@ -42,7 +47,8 @@ void MainWindow::createFirstVersion(){
     
     //retrieveVersionDataForFile()
     
-};
+}
+
 void MainWindow::saveCurrent(){
  
     
@@ -59,19 +65,22 @@ void MainWindow::selectEntry(){
     //
     
     
-};
+}
+
 bool MainWindow::showComment(){
     
     //getComment(filename,verNum);
     //display Qt "Information Dialog"
     
-};
+}
+
 bool MainWindow::retrieveVersion(){
     
     //retrieveForm
     //retrieveVersion())
     
-};
+}
+
 void MainWindow::setReferenceVersion(){
     
     //Qt confirmation dialog 
@@ -81,7 +90,7 @@ void MainWindow::setReferenceVersion(){
         //setReference(filename,verNum,comment)
     //retrieveVersionDataForFile()
     
-};
+}
 
 MainWindow::~MainWindow() {
 }

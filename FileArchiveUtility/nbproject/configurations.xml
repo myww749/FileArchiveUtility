@@ -53,6 +53,7 @@
           <standard>8</standard>
           <incDir>
             <pElem>/usr/local/opt/sqlite/include/sqlite3.h</pElem>
+            <pElem>/usr/local/Cellar/zlib/1.2.8/include/zlib.h</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
@@ -60,6 +61,7 @@
             <linkerLibLibItem>sqlite3.0</linkerLibLibItem>
             <linkerLibLibItem>sqlite3</linkerLibLibItem>
             <linkerLibLibItem>sqlite3</linkerLibLibItem>
+            <linkerLibLibItem>z</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
