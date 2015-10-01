@@ -16,6 +16,7 @@ using namespace std;
  * and CREATES etc.
  */
 static int callback(void *data, int argc, char **argv, char **azColName) {
+    
     int i;
     fprintf(stderr, "%s: ", (const char*)data);
 
@@ -90,6 +91,7 @@ bool FileArchiver::differs(string filename) {
 }
 
 bool FileArchiver::exists(string filename) {
+    
     // check if the file already exists in the database, simply query using the filename
     string query = "SELECT * FROM blobtable;";  // JUST FOR TESTING SO FOR, NEEDS CHANGING
     char *errMsg;
@@ -115,6 +117,7 @@ bool FileArchiver::exists(string filename) {
 }
 
 void FileArchiver::insertNew(string filename, string comment) {
+    
     timespec* ts = NULL;
     
     // first check if the file exists, it would suck if it didn't
@@ -146,9 +149,11 @@ void FileArchiver::insertNew(string filename, string comment) {
     ts->tv_nsec = mts.tv_nsec;
     
 #else
+    
     if ( clock_gettime(CLOCK_REALTIME, ts) == -1) {
         cerr << "Error: Could not get time in func: FileRec::createData" << end;
     }
+    
 #endif
     
     currentRecord.setModiftyTime(*ts);
@@ -171,6 +176,7 @@ void FileArchiver::insertNew(string filename, string comment) {
         inFile.read(inBuffer, BUFFER_SIZE);
         gzwrite(outFile, inBuffer, inFile.gcount());
     }
+    
     inFile.close();
     gzclose(outFile);
     
@@ -222,6 +228,7 @@ void FileArchiver::createZipFile(string filename) {
 }
     
 size_t FileArchiver::hashFile(string filename) {
+    
     size_t hash = 0;
     string fileContent = "";
     string line = "";
@@ -240,12 +247,16 @@ size_t FileArchiver::hashFile(string filename) {
     }
     
 #ifdef __APPLE__
+    
     //Hash the content to integer
     __gnu_cxx::hash<const char*> hash_fn;
     hash = hash_fn(fileContent.c_str());
+    
 #else
+    
     std::hash<string> hash_fn;
     hash = hash_fn(filename);
+    
 #endif
     
     fileToHash.close();
