@@ -16,7 +16,13 @@
 #include <stdlib.h>
 #include <fstream>
 #include <ctime>
+#include <functional>
+#include "FileRec.h"
 #include "constants.h"
+
+#ifdef __APPLE__
+#include <ext/hash_map>
+#endif
 
 /*
  * Interacts heavily with the database, creating and modifying versions of files
@@ -91,12 +97,24 @@ public:
     
     virtual ~FileArchiver();
 private:
+    FileRec currentRecord; /* FileRec currentRecord:
+                            * This represents the current file record that we
+                            * are operating on. When the interface
+                            * is used to select a file this will either
+                            * be populated by data already in the database
+                            * or if the record doesn't exist, it will
+                            * be populated with new data and set as the reference.
+                            */
     int rc;
     sqlite3 *database;
-    bool hasResults = false; /* Set in call back to false if there are no results,
+    bool hasResults = false; /* bool hasResults:
+                              * Set in call back to false if there are no results,
                               * only use this to check after you execute a query
                               * then reset to false
                               */
+    
+    // hashes a files contents that is on disk, returns the hash
+    size_t hashFile(std::string);
 };
 
 #endif	/* FILEARCHIVER_H */

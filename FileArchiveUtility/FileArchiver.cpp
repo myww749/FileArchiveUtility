@@ -6,7 +6,6 @@
  */
 
 #include "FileArchiver.h"
-#include "FileRec.h"
 #include <zlib.h>
 
 using namespace std;
@@ -77,19 +76,17 @@ FileArchiver::FileArchiver() {
        }        
     } 
     
+    // TODO: Remove this. It's for testing this function.
     insertNew("test", "comment");
 }
 
-
-
 bool FileArchiver::differs(string filename) {
-    // get the hash of the revision of the file from the database
     
-    // hash the file being added
+    if ( hashFile(filename) == currentRecord.getRecentHash() ) {
+        return false;
+    }
     
-    // check for a difference
-    
-    // return true if there is
+    return true;
 }
 
 bool FileArchiver::exists(string filename) {
@@ -119,14 +116,6 @@ bool FileArchiver::exists(string filename) {
 
 void FileArchiver::insertNew(string filename, string comment) {
     // check if it exists, if not then create a whole new file with a reference file
-    if ( exists(filename) ) {
-        cout << "Database already exists." << endl;
-        return;
-    }
-    
-    FileRec rec;
-    rec.createData(filename);
-    
     
     
     // make sure to compress using gzip
@@ -142,6 +131,7 @@ void FileArchiver::update(string filename, string comment) {
 
 void FileArchiver::retrieveVersion(int versionnum, string filename, string retrievetofilename) {
     // versionnum is the row index in the database of the file for filename and output it to the 
+   
     // retrievetofilename
     
     // make sure to decompress
@@ -174,6 +164,38 @@ void FileArchiver::createZipFile(string filename) {
     // and store it in the database
 }
     
+size_t FileArchiver::hashFile(string filename) {
+    size_t hash = 0;
+    string fileContent = "";
+    string line = "";
+    
+    ifstream fileToHash;
+    
+    fileToHash.open(filename.c_str(), fstream::in);
+    
+    if ( fileToHash.good() ) {
+        while ( !fileToHash.eof() ) {
+            getline(fileToHash, line, '\n');
+            fileContent += line + "\n";
+            line = "";
+        }
+    } else {
+        return -1;
+    }
+    
+#ifdef __APPLE__
+    //Hash the content to integer
+    __gnu_cxx::hash<const char*> hash_fn;
+    hash = hash_fn(fileContent.c_str());
+#else
+    std::hash<string> hash_fn;
+    hash = hash_fn(filename);
+#endif
+    
+    fileToHash.close();
+    return hash;
+}
+
 FileArchiver::~FileArchiver() {
     sqlite3_close(database);
 }
