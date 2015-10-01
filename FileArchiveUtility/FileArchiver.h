@@ -107,11 +107,6 @@ private:
                             */
     int rc;
     sqlite3 *database;
-    bool hasResults = false; /* bool hasResults:
-                              * Set in call back to false if there are no results,
-                              * only use this to check after you execute a query
-                              * then reset to false
-                              */
     
     // hashes a files contents that is on disk, returns the hash
     size_t hashFile(std::string);
