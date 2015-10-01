@@ -96,7 +96,7 @@ void FileRec::setComments(int index, string value){
 void FileRec::createData(string filename) {
 
     //Create a char pointer to read in the file
-    char* fileContents;
+    char* fileContents = NULL;
 
     //Open the file for read
     ifstream afile(filename.c_str(), ios::in | ios::binary | ios::ate);
@@ -105,22 +105,16 @@ void FileRec::createData(string filename) {
     afile.seekg(0, ios::end);
     
     int length = afile.tellg();
-    
     afile.seekg(0, ios::beg);
-    
     string temp("temp");
     
     //Set the name and the length of the file
     setFileName(filename);
-    
     filename += temp;
-    
     setTempname(filename);
-    
     setLength(length);
     
-    timespec* ts;
-    
+    timespec* ts = NULL;
     
     //Set the modify time CHECKING THE PLATFORM
 #ifdef __APPLE__
@@ -133,7 +127,6 @@ void FileRec::createData(string filename) {
     ts->tv_sec = mts.tv_sec;
     ts->tv_nsec = mts.tv_nsec;
     
-    
 #else
     if ( clock_gettime(CLOCK_REALTIME, ts) == -1) {
         cerr << "Error: Could not get time in func: FileRec::createData" << end;
@@ -143,7 +136,7 @@ void FileRec::createData(string filename) {
     setModiftyTime(*ts);
      
     //Read in the file
-    if(afile.is_open()){
+    if(afile.good()){
         
         //Allocate the memory for char[]
         fileContents = new char[length];
@@ -153,7 +146,6 @@ void FileRec::createData(string filename) {
         {
             cout<<"Fail to read"<<endl;
         }
-        
     }
     
     //convert the char* to string 
@@ -161,18 +153,19 @@ void FileRec::createData(string filename) {
     stringstream str(tempContent);
     
     // continues to get errors for me (brandon) :(
+    size_t hash = 0;
     
-    size_t hash;
-    
+#ifdef __APPLE__
     //Hash the content to integer
-    std::hash<std::string> hash_fn;
- 
-    hash = hash_fn(str.str());
+    __gnu_cxx::hash<const char*> hash_fn;
+    hash = hash_fn(str.str().c_str());
+#else
+    std::hash<string> hash_fn;
+    hash = hash_fn(str);
+#endif
     setRecentHash(hash);
     
     afile.close();
-    
-    
 }
 
 //Transfer record

@@ -22,11 +22,12 @@
 #include <string>
 
 // check if on apple system, apple doesn't support clock_gettime
+// also doesn't properly support hash<key> (for brandon :().
 #ifdef __APPLE__
 #include <mach/clock.h>
 #include <mach/mach.h>
+#include <ext/hash_map>
 #endif
-
 
 class FileRec{
 	private:
