@@ -36,3 +36,8 @@ brew install zlib <br>
 brew list zlib <br>
 
 The last command will tell you where the includes and library files are, add them to the netbeans properties for linker and compiler then include <zlib.h>
+
+## gdb problems
+
+You must install gdb using brew (I think on windows it is not a problem) and set up a certificate to let gdb
+work, solution is here http://stackoverflow.com/questions/11504377/gdb-fails-with-unable-to-find-mach-task-port-for-process-id-error
