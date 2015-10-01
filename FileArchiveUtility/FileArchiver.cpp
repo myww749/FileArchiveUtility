@@ -17,6 +17,10 @@ using namespace std;
  */
 static int callback(void *data, int argc, char **argv, char **azColName) {
     
+    if ( argv[0] == NULL ) {
+        
+    }
+    
     int i;
     fprintf(stderr, "%s: ", (const char*)data);
 
@@ -25,6 +29,7 @@ static int callback(void *data, int argc, char **argv, char **azColName) {
     }
     
     printf("\n");
+    
     return 0;
 }
 
@@ -75,7 +80,7 @@ FileArchiver::FileArchiver() {
            cerr << "SQL statement execution, something went wrong, likely the statement could \n not run because the table exists." << endl;
            cerr << errMsg << endl;
        }        
-    } 
+    }
     
     // TODO: Remove this. It's for testing this function.
     insertNew("myFile.txt", "comment");
@@ -93,26 +98,34 @@ bool FileArchiver::differs(string filename) {
 bool FileArchiver::exists(string filename) {
     
     // check if the file already exists in the database, simply query using the filename
-    string query = "SELECT * FROM blobtable;";  // JUST FOR TESTING SO FOR, NEEDS CHANGING
-    char *errMsg;
-    char *data = "Callback!";   // it looks like the results get stored in data, they dont
-
-    rc = sqlite3_exec(database, query.c_str(), callback, (void*)data, &errMsg);
-
-    if ( rc == SQLITE_OK ) {
-        sqlite3_free(errMsg);
-    } else {
-        cout << "Error, could not complete query in function \"exists\"." << endl;
+    sqlite3_stmt* statement;
+    string query = "SELECT * FROM filerec;";
+    int result;
+    
+    rc = sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL);
+    int rc = sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL);
+    if (rc != SQLITE_OK) {
+        cout << "error: " << sqlite3_errmsg(database) << endl;
+        // or throw an exception
         return false;
     }
     
-    // check 
-    if ( hasResults ) {
-        hasResults = false;
-        return true;
+    rc = sqlite3_step(statement);
+    if ( rc != SQLITE_DONE && rc != SQLITE_ROW ) {
+        cout << "error: " << sqlite3_errmsg(database) << endl;
+        sqlite3_finalize(statement);
+        return false;
     }
     
-    return false;
+    if ( rc == SQLITE_DONE ) {
+        return false;
+    } else if ( sqlite3_column_type(statement, 0) == SQLITE_NULL ) {
+        return false;
+    }
+    
+    sqlite3_finalize(statement);
+    
+    return true;
 }
 
 void FileArchiver::insertNew(string filename, string comment) {

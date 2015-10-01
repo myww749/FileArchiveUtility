@@ -29,6 +29,22 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1"
+                     displayName="FileArchiverTester"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/FileArchiverTester.cpp</itemPath>
+        <itemPath>tests/FileArchiverTester.h</itemPath>
+        <itemPath>tests/newtestrunner.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2"
+                     displayName="New CppUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/newtestclass.cpp</itemPath>
+        <itemPath>tests/newtestclass.h</itemPath>
+        <itemPath>tests/newtestrunner1.cpp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -109,9 +125,49 @@
       </item>
       <item path="constants.h" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="persistentstore.db" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/FileArchiverTester.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/FileArchiverTester.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/newtestclass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/newtestclass.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/newtestrunner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/newtestrunner1.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ui_MainWindow.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -158,9 +214,49 @@
       </item>
       <item path="constants.h" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="persistentstore.db" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/FileArchiverTester.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/FileArchiverTester.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/newtestclass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/newtestclass.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/newtestrunner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/newtestrunner1.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ui_MainWindow.h" ex="false" tool="3" flavor2="0">
       </item>
