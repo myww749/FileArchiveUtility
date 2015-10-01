@@ -71,7 +71,7 @@ public:
     /*
      * Goes to the database and collects the value curhash from the filerec in question.
      */
-    void getHashOfLastSaved(std::string filename);
+    size_t getHashOfLastSaved(std::string filename);
     
     /*
      * Simply gets the comment for the specific version.
