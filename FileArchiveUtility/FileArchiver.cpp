@@ -115,10 +115,67 @@ bool FileArchiver::exists(string filename) {
 }
 
 void FileArchiver::insertNew(string filename, string comment) {
-    // check if it exists, if not then create a whole new file with a reference file
+    timespec* ts = NULL;
     
+    // first check if the file exists, it would suck if it didn't
+    fstream checkExists(filename.c_str(), fstream::in);
+    if ( !checkExists.good() ) {
+        cerr << "File to insert: " << filename << " does not exist." << endl;
+        cerr << "Can not create new database entry, returning." << endl;
+        checkExists.close();
+        return;
+    }
     
-    // make sure to compress using gzip
+    // it's time to create a new filerec.
+    currentRecord.setFileName(filename);
+    currentRecord.setComments(0, comment);
+    currentRecord.setBlockHashes(0, hashFile(filename));
+    currentRecord.setFileHash(hashFile(filename));
+    currentRecord.setLength(1); // I assume this is the revision count
+    currentRecord.setRefnumber(0);
+    
+    //Set the modify time CHECKING THE PLATFORM
+#ifdef __APPLE__
+    
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    ts->tv_sec = mts.tv_sec;
+    ts->tv_nsec = mts.tv_nsec;
+    
+#else
+    if ( clock_gettime(CLOCK_REALTIME, ts) == -1) {
+        cerr << "Error: Could not get time in func: FileRec::createData" << end;
+    }
+#endif
+    
+    currentRecord.setModiftyTime(*ts);
+    
+    // create a tmp file on disk that is the compressed version of the file
+    // being added, this will contain the data to be added to the blob field
+    ifstream inFile(filename.c_str(), fstream::binary);
+    gzFile outFile = gzopen((filename + ".zip").c_str(), "wb");
+    
+    // again check files
+    if ( !inFile.good() || !outFile) {
+        cerr << "One of the files in compression is bad." << endl;
+        return;
+    }
+    
+    const int BUFFER_SIZE = 1024;
+    char inBuffer[BUFFER_SIZE];
+    
+    while ( !inFile.eof() ) {
+        inFile.read(inBuffer, BUFFER_SIZE);
+        gzwrite(outFile, inBuffer, inFile.gcount());
+    }
+    inFile.close();
+    gzclose(outFile);
+    
+    // now grab all that compresses goodness and send it on it's way to the db
+    
 }
 
 void FileArchiver::update(string filename, string comment) {
@@ -170,7 +227,6 @@ size_t FileArchiver::hashFile(string filename) {
     string line = "";
     
     ifstream fileToHash;
-    
     fileToHash.open(filename.c_str(), fstream::in);
     
     if ( fileToHash.good() ) {
