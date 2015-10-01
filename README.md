@@ -26,7 +26,7 @@ My sqlite3 installing was in /usr/local/opt/sqlite and in there, there was the l
 
 ## Setting up zlib
 
-# Mac
+### Mac
 
 If not installed install homebrew package manager.
 
