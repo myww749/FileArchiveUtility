@@ -23,3 +23,16 @@ FileRec is currently using linux specific function from the time.h, which is pro
 ## Setting up sqlite3
 Make sure to set the linker to add the correct include directories for sqlite3 and the correct library files.
 My sqlite3 installing was in /usr/local/opt/sqlite and in there, there was the libs and includes.
+
+## Setting up zlib
+
+### Mac
+
+If not installed install homebrew package manager.
+
+Then run these commands:
+brew tap homebrew/dupes <br>
+brew install zlib <br>
+brew list zlib <br>
+
+The last command will tell you where the includes and library files are, add them to the netbeans properties for linker and compiler then include <zlib.h>
