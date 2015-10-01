@@ -19,7 +19,7 @@ RCC_DIR =
 UI_DIR = 
 QMAKE_CC = gcc
 QMAKE_CXX = g++
-DEFINES += 
+DEFINES += DEBUG 
 INCLUDEPATH += /usr/local/opt/sqlite/include/sqlite3.h /usr/local/Cellar/zlib/1.2.8/include/zlib.h 
 LIBS += -lsqlite3.0 -lsqlite3 -lsqlite3 -lz  
 equals(QT_MAJOR_VERSION, 4) {
