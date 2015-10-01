@@ -8,6 +8,7 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow() {
+    
     widget.setupUi(this);
 }
 
@@ -21,6 +22,11 @@ void MainWindow::selectFile(){
     //Else
         //createFirstVersion())
     
+    if ( fileArchiver.exists(widget.fileLocation->text().toStdString()) ) {
+        
+    } else {
+        
+    }
 }
 
 void MainWindow::retrieveVersionData(){

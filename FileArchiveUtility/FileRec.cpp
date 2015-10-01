@@ -11,7 +11,7 @@ string FileRec::getFileName(){
 string FileRec::getTempname(){
     return this->tempname;
 }
-time_t FileRec::getModiftyTime(){
+timespec FileRec::getModiftyTime(){
     return this->modifyTime;
 }
 
@@ -56,7 +56,7 @@ void FileRec::setTempname(string tempname){
     this->tempname = tempname;
 }
 
-void FileRec::setModiftyTime(time_t time) {
+void FileRec::setModiftyTime(timespec time) {
     this->modifyTime = time;
 }
 
@@ -119,18 +119,28 @@ void FileRec::createData(string filename) {
     
     setLength(length);
     
+    timespec* ts;
     
-    //Set the modify time
-    struct stat STAT;
-    struct utimbuf new_times;
     
-    if(stat(filename.c_str(), &STAT) <0)
-    {
-        perror(filename.c_str());
-        exit(0);
+    //Set the modify time CHECKING THE PLATFORM
+#ifdef __APPLE__
+    
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    ts->tv_sec = mts.tv_sec;
+    ts->tv_nsec = mts.tv_nsec;
+    
+    
+#else
+    if ( clock_gettime(CLOCK_REALTIME, ts) == -1) {
+        cerr << "Error: Could not get time in func: FileRec::createData" << end;
     }
+#endif
     
-    setModiftyTime(STAT.st_mtime);
+    setModiftyTime(*ts);
      
     //Read in the file
     if(afile.is_open()){
@@ -152,7 +162,7 @@ void FileRec::createData(string filename) {
     
     // continues to get errors for me (brandon) :(
     
-    /*size_t hash;
+    size_t hash;
     
     //Hash the content to integer
     std::hash<std::string> hash_fn;
@@ -160,7 +170,7 @@ void FileRec::createData(string filename) {
     hash = hash_fn(str.str());
     setRecentHash(hash);
     
-    afile.close();/*/
+    afile.close();
     
     
 }

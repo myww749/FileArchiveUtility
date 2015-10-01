@@ -23,6 +23,7 @@ static int callback(void *data, int argc, char **argv, char **azColName) {
     for ( i = 0; i < argc; i++ ) {
         printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
     }
+    
     printf("\n");
     return 0;
 }
@@ -35,6 +36,7 @@ FileArchiver::FileArchiver() {
     // check if database exists
     fstream databaseFile(DATABASE_FILE);
     
+    // CREATE DATABASE IF IT DOES NOT EXIST
     if ( databaseFile.fail() ) {
         databaseFile.close();
         
