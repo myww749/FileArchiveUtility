@@ -96,8 +96,7 @@ bool FileArchiver::exists(string filename) {
     string query = "SELECT * FROM blobtable;";  // JUST FOR TESTING SO FOR, NEEDS CHANGING
     char *errMsg;
     char *data = "Callback!";   // it looks like the results get stored in data, they dont
-    
-    // FIX: always results in an error, crashes
+
     rc = sqlite3_exec(database, query.c_str(), callback, (void*)data, &errMsg);
 
     if ( rc == SQLITE_OK ) {
@@ -188,7 +187,7 @@ void FileArchiver::insertNew(string filename, string comment) {
     
     // now grab all that compressed goodness and send it on it's way to the db
     char* compressedData;
-    ifstream tmpZipFile(tmpZipFileName.c_str(), fstream::in | fstream::binary);
+    ifstream tmpZipFile(tmpZipFileName.c_str(), ios::in | ios::binary);
     
     if ( !tmpZipFile.good() ) {
         cerr << "Tmp zip file not found";
@@ -196,20 +195,29 @@ void FileArchiver::insertNew(string filename, string comment) {
     }
     
     // FIX: Doesn't work properly
-    compressedData = new char[1024];
+    compressedData = new char[BUFFER_SIZE];
+    char* leBuffer = new char[BUFFER_SIZE]; // this buffer is French
     while ( !tmpZipFile.eof() ) {
-        tmpZipFile.read(compressedData, BUFFER_SIZE);
+        tmpZipFile.read(leBuffer, BUFFER_SIZE);
         
         // resize compressedFile
-        char* tmpCDat = new char[strlen(compressedData)];
-        strcpy(tmpCDat, compressedData);
+        char* newDat = new char[strlen(compressedData) + BUFFER_SIZE];
+        strcat(newDat, compressedData);
+        strcat(newDat, leBuffer);
         delete[] compressedData;
-        compressedData = new char[strlen(tmpCDat) + BUFFER_SIZE];
-        strcpy(compressedData, tmpCDat);
-        delete[] tmpCDat;
+        compressedData = newDat;
     }
     
-    cout << compressedData << endl;
+#ifdef DEBUG
+    
+    // check if the data created generates a zip file correctly
+    string outTest = "DEBUGZIP.zip";
+    ofstream outputZip(outTest.c_str(), ios::out | ios::binary);
+    cout << "debug zip running" << endl;
+    outputZip.write(compressedData, sizeof(compressedData));
+    outputZip.close();
+    
+#endif
     
     // delete the temporary zip file
     
