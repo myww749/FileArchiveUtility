@@ -81,15 +81,33 @@ void FileRec::setRefnumber(int refnumber){
 }
 
 void FileRec::setBlockHashes(int index, int value){
-    this->blockhashes.at(index) = value;
+
+    if ( index < (int)this->blockhashes.size() ) {
+        this->blockhashes[index] = value;
+    } else {
+        this->blockhashes.push_back(value);
+    }
+    
 }
 
-void FileRec::setVersionids(int index, int value){
-    this->versionids.at(index) = value;
+void FileRec::setVersionids(int index, int value) {
+    
+    if ( index < (int)this->versionids.size() ) {
+        this->versionids[index] = value;
+    } else {
+        this->versionids.push_back(value);
+    }
+    
 }
 
-void FileRec::setComments(int index, string value){
-    this->comments.at(index) = value;
+void FileRec::setComments(int index, string value) {
+  
+    if ( index < (int)this->comments.size() ) {
+        this->comments[index] = value;
+    } else {
+        this->comments.push_back(value);
+    }
+    
 }
 
 // Read a file and determines values

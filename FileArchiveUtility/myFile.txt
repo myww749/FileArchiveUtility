@@ -1,0 +1,33 @@
+/* 
+ * File:   FileArchiver.h
+ * Author: bq415asdasdasdads
+/*
+ * Interacts heavily with the database, creating and modifying versions of files
+ * and updating the database according making use of the FileRec class to represent
+ * version of files.
+ */
+class FileArchiver {
+public:    
+    FileArchiver();
+    dasd
+    bool exists(std::string filename);
+    
+    /*
+     * Creates a new inital archived record and, adds all inital information
+     * and stored the reference file (original blob data) and creates the hash.
+     * This is all sent to the database.
+     */
+    void insertNew(std::string filename, std::string comment);
+    
+    /*
+     * Does effectively the same thing as insertNew all though it checks
+     * if the file as not changed first asist, it will
+                            * be populated with new data and set as the reference.
+                            */
+    int rc;
+    sqlite3 *database;
+    bool hasResults = false; /* bool hasResults:
+                              * Set in call back to false if there are no results,
+                              * only use this to check after you execute a query
+                              * then reset to false
+                              */dsd

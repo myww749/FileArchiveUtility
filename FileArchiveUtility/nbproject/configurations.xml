@@ -41,7 +41,7 @@
   <confs>
     <conf name="Debug" type="4">
       <toolsSet>
-        <compilerSet>default</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -98,6 +98,8 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="myFile.txt" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="persistentstore.db" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ui_MainWindow.h" ex="false" tool="3" flavor2="0">
@@ -146,6 +148,8 @@
       <item path="constants.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="myFile.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="persistentstore.db" ex="false" tool="3" flavor2="0">
       </item>
