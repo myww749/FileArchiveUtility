@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <sqlite3.h>
+#include <QtSql/QtSql>
 #include <stdlib.h>
 #include <fstream>
 #include <ctime>
@@ -105,8 +106,14 @@ private:
                             * or if the record doesn't exist, it will
                             * be populated with new data and set as the reference.
                             */
-    int rc;
-    sqlite3 *database;
+    
+    // data base members
+    QSqlDatabase db;
+    QString dbDriver    = "QMYSQL";
+    QString dbHost      = "www.brandon-quinn.com";
+    QString dbName      = "CSCI222project";
+    QString dbUsername  = "csci222admin";
+    QString dbPassword  = "admin2224321";
     
     // hashes a files contents that is on disk, returns the hash
     size_t hashFile(std::string);

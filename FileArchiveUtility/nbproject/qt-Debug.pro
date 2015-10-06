@@ -7,7 +7,7 @@ VERSION = 1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
 PKGCONFIG +=
-QT = core gui widgets
+QT = core gui widgets sql
 SOURCES += FileArchiver.cpp FileRec.cpp MainWindow.cpp main.cpp
 HEADERS += FileArchiver.h FileRec.h MainWindow.h constants.h ui_MainWindow.h
 FORMS += MainWindow.ui
@@ -20,11 +20,5 @@ UI_DIR =
 QMAKE_CC = gcc
 QMAKE_CXX = g++
 DEFINES += DEBUG 
-INCLUDEPATH += /usr/local/opt/sqlite/include/sqlite3.h /usr/local/Cellar/zlib/1.2.8/include/zlib.h 
-LIBS += -lsqlite3.0 -lsqlite3 -lsqlite3 -lz  
-equals(QT_MAJOR_VERSION, 4) {
-QMAKE_CXXFLAGS += -std=c++11
-}
-equals(QT_MAJOR_VERSION, 5) {
-CONFIG += c++11
-}
+INCLUDEPATH += /usr/local/opt/sqlite/include/sqlite3.h /usr/local/Cellar/zlib/1.2.8/include/zlib.h /usr/local/Cellar/mysql/5.6.26/include 
+LIBS += -lsqlite3.0 -lsqlite3 -lsqlite3 -lz -lmysqlclient  

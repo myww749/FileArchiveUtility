@@ -17,10 +17,6 @@ using namespace std;
  */
 static int callback(void *data, int argc, char **argv, char **azColName) {
     
-    if ( argv[0] == NULL ) {
-        
-    }
-    
     int i;
     fprintf(stderr, "%s: ", (const char*)data);
 
@@ -33,54 +29,34 @@ static int callback(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
 
+/*
+ * Everything needs to be ported over to MySQL, using a web host
+ * or it can be done on localhost, a hosted database would make it easier
+ * for all team members to get access to the database,
+ * it would require no one to change any parts of the code. Should
+ * just work :P
+ * 
+ * This will assume that the database already exists and will not create it if it
+ * does not.
+ */
 FileArchiver::FileArchiver() {
     
-    char* errMsg = 0;
-    string sqlStatement = "";
+    // create the connection
+    db = QSqlDatabase::addDatabase(dbDriver);   // QMYSQL driver doesn't exist :(
+    db.setHostName(dbHost);
+    db.setDatabaseName(dbName);
+    db.setUserName(dbUsername);
+    db.setPassword(dbPassword);
     
-    // check if database exists
-    fstream databaseFile(DATABASE_FILE);
-    
-    // CREATE DATABASE IF IT DOES NOT EXIST
-    if ( databaseFile.fail() ) {
-        databaseFile.close();
-        
-        // create
-        ofstream dbcFile(DATABASE_FILE, fstream::out);
-        dbcFile.close();
-        
-        rc = sqlite3_initialize();
-        
-        // read sql file and create sql statement and execute
-        ifstream sqlFile(CREATE_DATABASE_SQL_FILE.c_str(), fstream::in);
-        
-        while ( sqlFile.good() ) {
-            string tmp;
-            getline(sqlFile, tmp, '\n');
-            sqlStatement += tmp + " ";
-        }
-        sqlFile.close();
-        
-        // create the sql connection
-       rc = sqlite3_open(DATABASE_FILE, &this->database);
-
-       if ( rc ) {
-           cerr << "Can not open database file." << sqlite3_errmsg(database) << endl;
-           exit(0);
-       } else {
-           cout << "Successful connection." << endl;
-       }
-
-       rc = sqlite3_exec(database, sqlStatement.c_str(), NULL, 0, &errMsg);
-
-       if ( rc == SQLITE_OK ) {
-           sqlite3_free(errMsg);
-           cout << "table created." << endl;
-       } else {
-           cerr << "SQL statement execution, something went wrong, likely the statement could \n not run because the table exists." << endl;
-           cerr << errMsg << endl;
-       }        
+    if ( !db.open() ) { // we have no connection
+        cout << "Could not connect to the database at host: " << dbHost.toStdString() << endl;
+        cout << "Could be anything." << endl;
+        exit(0);
     }
+    
+    // test a query
+    QSqlQuery query1("SELECT * FROM filerec;", db);
+    query1.exec();
     
     // TODO: Remove this. It's for testing this function.
     insertNew("myFile.txt", "comment");
@@ -96,34 +72,6 @@ bool FileArchiver::differs(string filename) {
 }
 
 bool FileArchiver::exists(string filename) {
-    
-    // check if the file already exists in the database, simply query using the filename
-    sqlite3_stmt* statement;
-    string query = "SELECT * FROM filerec;";
-    int result;
-    
-    rc = sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL);
-    int rc = sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL);
-    if (rc != SQLITE_OK) {
-        cout << "error: " << sqlite3_errmsg(database) << endl;
-        // or throw an exception
-        return false;
-    }
-    
-    rc = sqlite3_step(statement);
-    if ( rc != SQLITE_DONE && rc != SQLITE_ROW ) {
-        cout << "error: " << sqlite3_errmsg(database) << endl;
-        sqlite3_finalize(statement);
-        return false;
-    }
-    
-    if ( rc == SQLITE_DONE ) {
-        return false;
-    } else if ( sqlite3_column_type(statement, 0) == SQLITE_NULL ) {
-        return false;
-    }
-    
-    sqlite3_finalize(statement);
     
     return true;
 }
@@ -321,6 +269,6 @@ size_t FileArchiver::hashFile(string filename) {
 }
 
 FileArchiver::~FileArchiver() {
-    sqlite3_close(database);
+    db.close();
 }
 

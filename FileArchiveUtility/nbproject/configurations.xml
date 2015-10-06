@@ -68,19 +68,19 @@
   <confs>
     <conf name="Debug" type="4">
       <toolsSet>
-        <compilerSet>GNU|GNU</compilerSet>
+        <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <qt>
-        <modules>core gui widgets</modules>
+        <modules>core gui widgets sql</modules>
       </qt>
       <compileType>
         <ccTool>
-          <standard>8</standard>
           <incDir>
             <pElem>/usr/local/opt/sqlite/include/sqlite3.h</pElem>
             <pElem>/usr/local/Cellar/zlib/1.2.8/include/zlib.h</pElem>
+            <pElem>/usr/local/Cellar/mysql/5.6.26/include</pElem>
           </incDir>
           <preprocessorList>
             <Elem>DEBUG</Elem>
@@ -92,12 +92,13 @@
             <linkerLibLibItem>sqlite3</linkerLibLibItem>
             <linkerLibLibItem>sqlite3</linkerLibLibItem>
             <linkerLibLibItem>z</linkerLibLibItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
       <packaging>
         <packType>Tar</packType>
-        <additionalOptions>-v </additionalOptions>
+        <additionalOptions>-v -std=c++0x </additionalOptions>
         <packFileList>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}"

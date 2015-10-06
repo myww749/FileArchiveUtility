@@ -19,7 +19,7 @@ CCC=g++
 CXX=g++
 FC=gfortran
 AS=as
-QMAKE=qmake-4.8
+QMAKE=qmake
 
 # Macros
 CND_PLATFORM=GNU-MacOSX
@@ -57,7 +57,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lsqlite3.0 -lsqlite3 -lsqlite3 -lz
+LDLIBSOPTIONS=-lsqlite3.0 -lsqlite3 -lsqlite3 -lz -lmysqlclient
 
 nbproject/qt-${CND_CONF}.mk: nbproject/qt-${CND_CONF}.pro FORCE
 	${QMAKE} VPATH=. -spec macx-g++ -o qttmp-${CND_CONF}.mk nbproject/qt-${CND_CONF}.pro
