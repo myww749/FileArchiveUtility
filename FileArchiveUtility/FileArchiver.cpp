@@ -213,7 +213,7 @@ void FileArchiver::update(string filename, string comment) {
     
     currentRecord.addVersion(filename, comment, filename, *ts, strlen(compressedData), currentRecord.getVersion() + 1, hash);
     
-    QString filenameQString      = QString::fromStdString(filename);
+    QString filenameQString     = QString::fromStdString(filename);
     QString compressesDatQStr   = QString::fromStdString(string(compressedData));
     
     // do queries
@@ -254,8 +254,59 @@ void FileArchiver::update(string filename, string comment) {
 void FileArchiver::retrieveVersion(int versionnum, string filename, string retrievetofilename) {
     
     // versionnum is the row index in the database of the file for filename and output it to the 
+    ofstream outputZipFile;
     QString qFilename = QString::fromStdString(filename);
-    QString query = "SELECT * FROM versionrec WHERE filered='" + qFilename + "';";
+    QString verQueryStr = "SELECT * FROM versionrec WHERE fileref='" + qFilename + "';";
+    
+    // version data
+    int id = 0;
+    QString fileref;
+    int length = 0;
+    int mtsec = 0;
+    int mtnsec = 0;
+    int ovhash = 0;
+    
+    // run the query to get version info
+    QSqlQuery query1(db);
+    query1.exec(verQueryStr);
+    
+    for ( int i = 0; i < versionnum; i++ ) {
+        query1.next();
+        QString tmp = query1.value(0).toString();
+        id = query1.value(0).toString().toInt();
+        fileref = query1.value(1).toString();
+        length = query1.value(2).toString().toInt();
+        mtsec = query1.value(3).toString().toInt();
+        mtnsec = query1.value(4).toString().toInt();
+        ovhash = query1.value(5).toString().toInt();
+        
+        if ( tmp == "" || tmp == NULL) {
+            cerr << "Went too far getting version from db or no data." << endl;
+            return;
+        }
+    }
+    
+    QString dataQueryStr = QString::fromStdString("SELECT version, data, ovhash FROM blktable WHERE version=" + versionnum + " AND ovhash=" + ovhash + ";");
+    
+    // run query to get actual data
+    QSqlQuery query2(db);
+    query2.exec(dataQueryStr);
+    
+    // there should only be 1 result
+    query1.next();
+    
+    QString data = query1.value(1).toString();
+    
+    // write out data
+    outputZipFile.open(string(filename + "_" + mtsec + "_" + mtnsec + ".zip"), ios::out);
+    
+    if ( outputZipFile.good() ) {
+        
+    } else {
+        cerr << "Could not create output zip file." << endl;
+        return;
+    }
+    
     // retrievetofilename
     
     // make sure to decompress
