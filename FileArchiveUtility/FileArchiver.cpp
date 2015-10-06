@@ -31,17 +31,14 @@ FileArchiver::FileArchiver() {
     db.setPort(3306);
     
     if ( !db.open() ) { // we have no connection
-        cout << "Could not connect to the database at host: " << dbHost.toStdString() << endl;
-        cout << "Could be anything." << endl;
-        exit(0);
+        cerr << "Could not connect to the database at host: " << dbHost.toStdString() << endl;
+        cerr << "Could be anything." << endl;
     }
     
     // test a query
     QSqlQuery query1("SELECT * FROM filerec;", db);
     query1.exec();
     
-    // TODO: Remove this. It's for testing this function.
-    insertNew("myFile.txt", "comment");
 }
 
 bool FileArchiver::differs(string filename) {
@@ -75,6 +72,30 @@ bool FileArchiver::exists(string filename) {
     return true;
 }
 
+timespec* FileArchiver::getTime() {
+    timespec* ts = new timespec();
+    
+    #ifdef __APPLE__
+    
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    ts->tv_sec = mts.tv_sec;
+    ts->tv_nsec = mts.tv_nsec;
+    
+#else
+    
+    if ( clock_gettime(CLOCK_REALTIME, ts) == -1) {
+        cerr << "Error: Could not get time in func: FileRec::createData" << end;
+    }
+    
+#endif
+ 
+    return ts;
+}
+
 /*
  * A lot of the inner working of this function can be moved to the
  * update function, this should probably modify the currentFileRec 
@@ -101,59 +122,14 @@ void FileArchiver::insertNew(string filename, string comment) {
     currentRecord.setLength(1); // I assume this is the revision count
     currentRecord.setRefnumber(0);
     
-    //Set the modify time CHECKING THE PLATFORM
-#ifdef __APPLE__
-    
-    clock_serv_t cclock;
-    mach_timespec_t mts;
-    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
-    clock_get_time(cclock, &mts);
-    mach_port_deallocate(mach_task_self(), cclock);
-    ts->tv_sec = mts.tv_sec;
-    ts->tv_nsec = mts.tv_nsec;
-    
-#else
-    
-    if ( clock_gettime(CLOCK_REALTIME, ts) == -1) {
-        cerr << "Error: Could not get time in func: FileRec::createData" << end;
-    }
-    
-#endif
-    
+    ts = getTime();
     currentRecord.setModiftyTime(*ts);
-    
-    delete ts; /* Cleaning your house while your kids are still growing up 
-                * is like shoveling the walk before it stops snowing.
-                *    - Phyllis Diller
-                */
     
     // create a tmp file on disk that is the compressed version of the file
     // being added, this will contain the data to be added to the blob field
-    createZipFile(filename);
-    
     // now grab all that compressed goodness and send it on it's way to the db
     char* compressedData;
-    ifstream tmpZipFile(tmpZipFileName.c_str(), ios::in | ios::binary);
-    
-    if ( !tmpZipFile.good() ) {
-        cerr << "Tmp zip file not found";
-        return;
-    }
-    
-    // TODO: Compression does not work properly, reading the compressesData and
-    // printing it out results in something very not right :(
-    compressedData = new char[BUFFER_SIZE];
-    char* leBuffer = new char[BUFFER_SIZE]; // this buffer is French
-    while ( !tmpZipFile.eof() ) {
-        tmpZipFile.read(leBuffer, BUFFER_SIZE);
-        
-        // resize compressedFile
-        char* newDat = new char[strlen(compressedData) + BUFFER_SIZE];
-        strcat(newDat, compressedData);
-        strcat(newDat, leBuffer);
-        delete[] compressedData;
-        compressedData = newDat;
-    }
+    compressedData = compressFile(filename);
     
 #ifdef DEBUG
     
@@ -221,16 +197,23 @@ void FileArchiver::insertNew(string filename, string comment) {
     insertQuery.exec(addToVersionRec);
     
     // make sure memory is clear
-    delete[] leBuffer;
+    delete ts;
     delete[] compressedData;
 }
 
 void FileArchiver::update(string filename, string comment) {
     // this will occur if the file already exists and there are differences
+    timespec* ts = new timespec();
     
     // create a new hash and make it the latest and add the changes to the database
+    size_t hash = hashFile(filename);
     
-    // make sure to compress changes using gzip
+    char* compressedData = compressFile(filename);
+    
+    currentRecord.addVersion(filename, comment, filename, *ts, strlen(compressedData), currentRecord.getVersion() + 1, hash);
+    
+    delete ts;
+    delete[] compressedData;
 }
 
 void FileArchiver::retrieveVersion(int versionnum, string filename, string retrievetofilename) {
@@ -264,7 +247,7 @@ void FileArchiver::setReference(string filename, int versionnum, string comment)
     // file changes are stored later on in compress format and are added on
 }
 
-void FileArchiver::createZipFile(string filename) {
+char* FileArchiver::compressFile(string filename) {
     string tmpZipFileName = (filename + ".zip");
     
     // zips the contents of the file as filename.zip so we can read it's bytes
@@ -275,7 +258,7 @@ void FileArchiver::createZipFile(string filename) {
     // again check files
     if ( !inFile.good() || !outFile) {
         cerr << "One of the files in compression is bad." << endl;
-        return;
+        return NULL;
     }
     
     char inBuffer[BUFFER_SIZE];
@@ -287,6 +270,32 @@ void FileArchiver::createZipFile(string filename) {
     
     inFile.close();
     gzclose(outFile);
+    
+    char* compressedData;
+    ifstream tmpZipFile(tmpZipFileName.c_str(), ios::in | ios::binary);
+    
+    if ( !tmpZipFile.good() ) {
+        cerr << "Tmp zip file not found";
+        return NULL;
+    }
+    
+    // TODO: Compression does not work properly, reading the compressesData and
+    // printing it out results in something very not right :(
+    compressedData = new char[BUFFER_SIZE];
+    char* leBuffer = new char[BUFFER_SIZE]; // this buffer is French
+    while ( !tmpZipFile.eof() ) {
+        tmpZipFile.read(leBuffer, BUFFER_SIZE);
+        
+        // resize compressedFile
+        char* newDat = new char[strlen(compressedData) + BUFFER_SIZE];
+        strcat(newDat, compressedData);
+        strcat(newDat, leBuffer);
+        delete[] compressedData;
+        compressedData = newDat;
+    }
+    
+    delete[] leBuffer;
+    return compressedData;
 }
     
 size_t FileArchiver::hashFile(string filename) {

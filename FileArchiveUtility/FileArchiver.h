@@ -96,7 +96,8 @@ public:
     /*
      * Compresses the file data before storage to reduce footprint.
      */
-    void createZipFile(std::string filename);
+    char* compressFile(std::string filename);
+    timespec* getTime();
     
     virtual ~FileArchiver();
 private:

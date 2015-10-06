@@ -117,6 +117,18 @@ void FileRec::setComments(int index, string value) {
     
 }
 
+void FileRec::addVersion(std::string filename, std::string comment, std::string tempname, timespec modifytime,
+                int length, int version, size_t recentHash) {
+    this->version = version;
+    setComments(version, comment);
+    this->tempname = tempname;
+    this->blockhashes[version] = recentHash;
+    this->recentHash = recentHash;
+    this->modifyTime = modifytime;
+    
+    
+}
+
 // Read a file and determines values
 void FileRec::createData(string filename) {
 

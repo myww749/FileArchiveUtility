@@ -72,6 +72,9 @@ class FileRec{
                 void setBlockHashes(int index, int value);
                 void setVersionids(int index, int value);
                 void setComments(int index, std::string value);
+                
+                void addVersion(std::string, std::string, std::string, timespec, int, int, size_t);
+                
                 std::vector<int> getVersionIdsVector();
                 std::vector<std::string> getCommentsVector();
                 
