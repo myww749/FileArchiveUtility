@@ -231,9 +231,13 @@ void FileArchiver::insertNew(string filename, string comment) {
                                 + hashFile(filename) + ", "
                                 + ");";
     
-    QString addToBlkTable       = "";
-    
     // update database
+    QSqlQuery insertQuery(db);
+    insertQuery.exec(addToBlobTable);
+    insertQuery.exec(addToFilerec);
+    insertQuery.exec(addToCommentsTable);
+    insertQuery.exec(addToFileBlkHashes);
+    insertQuery.exec(addToVersionRec);
     
     // make sure memory is clear
     delete[] leBuffer;
