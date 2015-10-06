@@ -98,7 +98,7 @@
       </compileType>
       <packaging>
         <packType>Tar</packType>
-        <additionalOptions>-v -std=c++0x </additionalOptions>
+        <additionalOptions>-v -std=c++11</additionalOptions>
         <packFileList>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}"

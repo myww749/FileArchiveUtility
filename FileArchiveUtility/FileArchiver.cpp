@@ -286,7 +286,13 @@ void FileArchiver::retrieveVersion(int versionnum, string filename, string retri
         }
     }
     
-    QString dataQueryStr = QString::fromStdString("SELECT version, data, ovhash FROM blktable WHERE version=" + versionnum + " AND ovhash=" + ovhash + ";");
+    ostringstream vnConvert;
+    ostringstream ovhashConvert;
+    
+    vnConvert << versionnum;
+    ovhashConvert << ovhash;
+    
+    QString dataQueryStr = QString::fromStdString("SELECT version, data, ovhash FROM blktable WHERE version=" + vnConvert.str() + " AND ovhash=" + ovhashConvert.str() + ";");
     
     // run query to get actual data
     QSqlQuery query2(db);
@@ -297,11 +303,19 @@ void FileArchiver::retrieveVersion(int versionnum, string filename, string retri
     
     QString data = query1.value(1).toString();
     
+    ostringstream mtConvert;
+    ostringstream mtnConvert;
+    
+    mtConvert << mtsec;
+    mtnConvert << mtnsec;
+    
     // write out data
-    outputZipFile.open(string(filename + "_" + mtsec + "_" + mtnsec + ".zip"), ios::out);
+    outputZipFile.open(string(filename + "_" + mtConvert.str() + "_" + mtnConvert.str() + ".zip").c_str(), ios::out | ios::binary);
     
     if ( outputZipFile.good() ) {
-        
+        outputZipFile << data.toStdString().c_str();
+        outputZipFile.close();
+
     } else {
         cerr << "Could not create output zip file." << endl;
         return;
