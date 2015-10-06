@@ -183,12 +183,12 @@ void FileArchiver::insertNew(string filename, string comment) {
     // delete the temporary zip file, all compression data should be saved
     remove(tmpZipFileName.c_str()); // c function
     
-    QString addToBlobTable = "INSERT INTO blobtable VALUES (" + QString::fromStdString(filename) + ", " + QString::fromStdString(string(compressedData)) + ");";
-    QString addToFilerec = "";
-    QString addToCommentsTable = "";
-    QString addToFileBlkHashes = "";
-    QString addToVersionRec = "";
-    QString addToBlkTable = "";
+    QString addToBlobTable      = "INSERT INTO blobtable VALUES (" + QString::fromStdString(filename) + ", " + QString::fromStdString(string(compressedData)) + ");";
+    QString addToFilerec        = "";
+    QString addToCommentsTable  = "";
+    QString addToFileBlkHashes  = "";
+    QString addToVersionRec     = "";
+    QString addToBlkTable       = "";
     
     
     // update database
