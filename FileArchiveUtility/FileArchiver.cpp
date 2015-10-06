@@ -75,6 +75,11 @@ bool FileArchiver::exists(string filename) {
     return true;
 }
 
+/*
+ * A lot of the inner working of this function can be moved to the
+ * update function, this should probably modify the currentFileRec 
+ * and then use the update function to add it to the database
+ */
 void FileArchiver::insertNew(string filename, string comment) {
     
     timespec* ts = new timespec();
@@ -180,10 +185,15 @@ void FileArchiver::insertNew(string filename, string comment) {
     
 #endif
     
+    // TODO: Calls hashFile many times, hashFile is not efficient, it does io
+    // store it 
+    
     // delete the temporary zip file, all compression data should be saved
-    QString filenameQString = QString::fromStdString(filename);
-    QString compressesDatQStr = QString::fromStdString(string(compressedData));
-    QString addToBlobTable      = "INSERT INTO blobtable VALUES (" + filenameQString + ", " + compressesDatQStr + ");";
+    QString filenameQString     = QString::fromStdString(filename);
+    QString compressesDatQStr   = QString::fromStdString(string(compressedData));
+    
+    QString addToBlobTable      = "INSERT INTO blobtable VALUES (" + filenameQString + 
+                                    ", " + compressesDatQStr + ");";
     
     // current the curhash and the ovhash are the same
     QString addToFilerec        = "INSERT INTO filerec VALUES(" 
@@ -196,13 +206,31 @@ void FileArchiver::insertNew(string filename, string comment) {
                                     + ts->tv_nsec + ", " 
                                     + ts->tv_sec + ", " 
                                     + QString::fromStdString(outTest) + ", " 
-                                    + QString::fromStdString(outTest) + ", " // mentions blobtable_tempname, not sure about this
+                                    + QString::fromStdString(outTest) // mentions blobtable_tempname, not sure about this
                                     + ts->tv_sec + ", " 
                                     + ");";
     
-    QString addToCommentsTable  = "";
-    QString addToFileBlkHashes  = "";
-    QString addToVersionRec     = "";
+    QString addToCommentsTable  = "INSERT INTO commentstable (filerec, commentnum, commenttxt) VALUES("
+                                + filenameQString + ", "
+                                + 1 + ", "
+                                + QString::fromStdString(comment)
+                                + ");";
+    
+    QString addToFileBlkHashes  = "INSERT INTO fileblkhashes (fileref, blknum, hashval) VALUES("
+                                + filenameQString + ", "
+                                + 1 + ", "
+                                + hashFile(filename) + ", "
+                                + ");";
+    
+    QString addToVersionRec     = "INSERT INTO versionrec (fileref, versionnum, length, mtsec, mtnsec, ovhash) VALUES("
+                                + filenameQString + ", "
+                                + 1 + ", "
+                                + strlen(compressedData) + ", "
+                                + ts->tv_nsec + ", "
+                                + ts->tv_sec + ", "
+                                + hashFile(filename) + ", "
+                                + ");";
+    
     QString addToBlkTable       = "";
     
     // update database
