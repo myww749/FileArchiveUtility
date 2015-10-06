@@ -28,6 +28,7 @@ FileArchiver::FileArchiver() {
     db.setDatabaseName(dbName);
     db.setUserName(dbUsername);
     db.setPassword(dbPassword);
+    db.setPort(3306);
     
     if ( !db.open() ) { // we have no connection
         cout << "Could not connect to the database at host: " << dbHost.toStdString() << endl;
@@ -153,7 +154,8 @@ void FileArchiver::insertNew(string filename, string comment) {
         return;
     }
     
-    // FIX: Doesn't work properly
+    // TODO: Compression does not work properly, reading the compressesData and
+    // printing it out results in something very not right :(
     compressedData = new char[BUFFER_SIZE];
     char* leBuffer = new char[BUFFER_SIZE]; // this buffer is French
     while ( !tmpZipFile.eof() ) {
@@ -178,9 +180,16 @@ void FileArchiver::insertNew(string filename, string comment) {
     
 #endif
     
-    // delete the temporary zip file
+    // delete the temporary zip file, all compression data should be saved
+    remove(tmpZipFileName.c_str()); // c function
     
-    // convert timespec in FileRec to something storable in database
+    QString addToBlobTable = "INSERT INTO blobtable VALUES (" + QString::fromStdString(filename) + ", " + QString::fromStdString(string(compressedData)) + ");";
+    QString addToFilerec = "";
+    QString addToCommentsTable = "";
+    QString addToFileBlkHashes = "";
+    QString addToVersionRec = "";
+    QString addToBlkTable = "";
+    
     
     // update database
     
@@ -216,7 +225,7 @@ bool FileArchiver::getComment(string filename, int versionnum) {
 }
 
 vector<int> FileArchiver::getVersionInfo(string filename) {
-    // returns all versions of a file as integers
+    return currentRecord.getVersionIdsVector();
 }
 
 void FileArchiver::setReference(string filename, int versionnum, string comment) {

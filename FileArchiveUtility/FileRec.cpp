@@ -97,7 +97,10 @@ void FileRec::setVersionids(int index, int value) {
     } else {
         this->versionids.push_back(value);
     }
-    
+}
+
+std::vector<int> FileRec::getVersionIdsVector() {
+    return this->versionids;
 }
 
 void FileRec::setComments(int index, string value) {

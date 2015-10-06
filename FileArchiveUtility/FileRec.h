@@ -72,7 +72,9 @@ class FileRec{
                 void setBlockHashes(int index, int value);
                 void setVersionids(int index, int value);
                 void setComments(int index, std::string value);
-    
+                std::vector<int> getVersionIdsVector();
+                
+                
 		// Read a file and determines values
 		void createData(std::string filename);
 
