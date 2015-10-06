@@ -69,22 +69,22 @@ public:
     /*
      * searches for the table given filename and gets the most recent version number
      */
-    int getCurrentVersionNumber(std::string filename);
+    int getCurrentVersionNumber();
     
     /*
      * Goes to the database and collects the value curhash from the filerec in question.
      */
-    size_t getHashOfLastSaved(std::string filename);
+    size_t getHashOfLastSaved();
     
     /*
      * Simply gets the comment for the specific version.
      */
-    std::string getComment(std::string filename, int versionnum);
+    std::string getComment(int versionnum);
     
     /*
      * Returns a vector list of all the indexes of a file.
      */
-    std::vector<int> getVersionInfo(std::string filename);
+    std::vector<int> getVersionInfo();
     
     /*
      * The reference is the original version of the file first uploaded.

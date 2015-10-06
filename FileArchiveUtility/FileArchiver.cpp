@@ -43,7 +43,7 @@ FileArchiver::FileArchiver() {
 
 bool FileArchiver::differs(string filename) {
     
-    if ( hashFile(filename) == currentRecord.getRecentHash() ) {
+    if ( static_cast<int>(hashFile(filename)) == currentRecord.getRecentHash() ) {
         return false;
     }
     
@@ -154,18 +154,18 @@ void FileArchiver::insertNew(string filename, string comment) {
     
     // current the curhash and the ovhash are the same
     QString addToFilerec        = "INSERT INTO filerec VALUES(" 
-                                    + filenameQString + ", " 
-                                    + hashFile(filename) + ", " 
-                                    + hashFile(filename) + ", " 
-                                    + 1 + ", "
-                                    + 1 + ", " 
-                                    + strlen(compressedData) + ", " 
-                                    + ts->tv_nsec + ", " 
-                                    + ts->tv_sec + ", " 
-                                    + QString::fromStdString(outTest) + ", " 
-                                    + QString::fromStdString(outTest) // mentions blobtable_tempname, not sure about this
-                                    + ts->tv_sec + ", " 
-                                    + ");";
+                                + filenameQString + ", " 
+                                + hashFile(filename) + ", " 
+                                + hashFile(filename) + ", " 
+                                + 1 + ", "
+                                + 1 + ", " 
+                                + strlen(compressedData) + ", " 
+                                + ts->tv_nsec + ", " 
+                                + ts->tv_sec + ", " 
+                                + QString::fromStdString(outTest) + ", " 
+                                + QString::fromStdString(outTest) // mentions blobtable_tempname, not sure about this
+                                + ts->tv_sec + ", " 
+                                + ");";
     
     QString addToCommentsTable  = "INSERT INTO commentstable (filerec, commentnum, commenttxt) VALUES("
                                 + filenameQString + ", "
@@ -202,6 +202,7 @@ void FileArchiver::insertNew(string filename, string comment) {
 }
 
 void FileArchiver::update(string filename, string comment) {
+    
     // this will occur if the file already exists and there are differences
     timespec* ts = new timespec();
     
@@ -212,32 +213,68 @@ void FileArchiver::update(string filename, string comment) {
     
     currentRecord.addVersion(filename, comment, filename, *ts, strlen(compressedData), currentRecord.getVersion() + 1, hash);
     
+    QString filenameQString      = QString::fromStdString(filename);
+    QString compressesDatQStr   = QString::fromStdString(string(compressedData));
+    
+    // do queries
+    QString addToBlobTable      = "INSERT INTO blobtable VALUES (" + filenameQString + 
+                                    ", " + compressesDatQStr + ");";
+    
+    QString addToVersionRec     = "INSERT INTO versionrec (fileref, versionnum, length, mtsec, mtnsec, ovhash) VALUES("
+                                + filenameQString + ", "
+                                + currentRecord.getVersion() + 1 + ", "
+                                + strlen(compressedData) + ", "
+                                + ts->tv_nsec + ", "
+                                + ts->tv_sec + ", "
+                                + hashFile(filename) + ", "
+                                + ");";
+    
+    QString addToCommentsTable  = "INSERT INTO commentstable (filerec, commentnum, commenttxt) VALUES("
+                                + filenameQString + ", "
+                                + currentRecord.getVersion() + 1 + ", "
+                                + QString::fromStdString(comment)
+                                + ");";
+    
+    QString addToFileBlkHashes  = "INSERT INTO fileblkhashes (fileref, blknum, hashval) VALUES("
+                                + filenameQString + ", "
+                                + currentRecord.getVersion() + 1 + ", "
+                                + hashFile(filename) + ", "
+                                + ");";   
+   
+    QSqlQuery updateQuery(db);
+    updateQuery.exec(addToBlobTable);
+    updateQuery.exec(addToVersionRec);
+    updateQuery.exec(addToCommentsTable);
+    updateQuery.exec(addToFileBlkHashes);
+    
     delete ts;
     delete[] compressedData;
 }
 
 void FileArchiver::retrieveVersion(int versionnum, string filename, string retrievetofilename) {
+    
     // versionnum is the row index in the database of the file for filename and output it to the 
-   
+    QString qFilename = QString::fromStdString(filename);
+    QString query = "SELECT * FROM versionrec WHERE filered='" + qFilename + "';";
     // retrievetofilename
     
     // make sure to decompress
 }
 
-int FileArchiver::getCurrentVersionNumber(string filename) {
+int FileArchiver::getCurrentVersionNumber() {
     currentRecord.getVersion();
 }
 
-size_t FileArchiver::getHashOfLastSaved(string filename) {
+size_t FileArchiver::getHashOfLastSaved() {
     currentRecord.getRecentHash();
 }
 
-string FileArchiver::getComment(string filename, int versionnum) {
+string FileArchiver::getComment(int versionnum) {
     // get the comment stored with the filename at row number versionnum
     currentRecord.getCommentsVector()[versionnum];
 }
 
-vector<int> FileArchiver::getVersionInfo(string filename) {
+vector<int> FileArchiver::getVersionInfo() {
     return currentRecord.getVersionIdsVector();
 }
 
@@ -249,6 +286,8 @@ void FileArchiver::setReference(string filename, int versionnum, string comment)
 
 char* FileArchiver::compressFile(string filename) {
     string tmpZipFileName = (filename + ".zip");
+    char inBuffer[BUFFER_SIZE];
+    char* compressedData;
     
     // zips the contents of the file as filename.zip so we can read it's bytes
     // and store it in the database
@@ -261,8 +300,6 @@ char* FileArchiver::compressFile(string filename) {
         return NULL;
     }
     
-    char inBuffer[BUFFER_SIZE];
-    
     while ( !inFile.eof() ) {
         inFile.read(inBuffer, BUFFER_SIZE);
         gzwrite(outFile, inBuffer, inFile.gcount());
@@ -271,7 +308,6 @@ char* FileArchiver::compressFile(string filename) {
     inFile.close();
     gzclose(outFile);
     
-    char* compressedData;
     ifstream tmpZipFile(tmpZipFileName.c_str(), ios::in | ios::binary);
     
     if ( !tmpZipFile.good() ) {
@@ -282,8 +318,10 @@ char* FileArchiver::compressFile(string filename) {
     // TODO: Compression does not work properly, reading the compressesData and
     // printing it out results in something very not right :(
     compressedData = new char[BUFFER_SIZE];
-    char* leBuffer = new char[BUFFER_SIZE]; // this buffer is French
+    char* leBuffer = new char[BUFFER_SIZE];
+    
     while ( !tmpZipFile.eof() ) {
+        
         tmpZipFile.read(leBuffer, BUFFER_SIZE);
         
         // resize compressedFile
@@ -292,6 +330,7 @@ char* FileArchiver::compressFile(string filename) {
         strcat(newDat, leBuffer);
         delete[] compressedData;
         compressedData = newDat;
+        
     }
     
     delete[] leBuffer;
@@ -308,11 +347,13 @@ size_t FileArchiver::hashFile(string filename) {
     fileToHash.open(filename.c_str(), fstream::in);
     
     if ( fileToHash.good() ) {
+        
         while ( !fileToHash.eof() ) {
             getline(fileToHash, line, '\n');
             fileContent += line + "\n";
             line = "";
         }
+        
     } else {
         return -1;
     }
