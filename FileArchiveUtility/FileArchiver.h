@@ -25,6 +25,8 @@
 #include <ext/hash_map>
 #endif
 
+const int BUFFER_SIZE = 1024;
+
 /*
  * Interacts heavily with the database, creating and modifying versions of files
  * and updating the database according making use of the FileRec class to represent
@@ -77,7 +79,7 @@ public:
     /*
      * Simply gets the comment for the specific version.
      */
-    bool getComment(std::string filename, int versionnum);
+    std::string getComment(std::string filename, int versionnum);
     
     /*
      * Returns a vector list of all the indexes of a file.

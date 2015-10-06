@@ -103,6 +103,10 @@ std::vector<int> FileRec::getVersionIdsVector() {
     return this->versionids;
 }
 
+ std::vector<std::string> FileRec::getCommentsVector() {
+     return this->comments;
+ }
+
 void FileRec::setComments(int index, string value) {
   
     if ( index < (int)this->comments.size() ) {

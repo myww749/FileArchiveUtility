@@ -73,7 +73,7 @@ class FileRec{
                 void setVersionids(int index, int value);
                 void setComments(int index, std::string value);
                 std::vector<int> getVersionIdsVector();
-                
+                std::vector<std::string> getCommentsVector();
                 
 		// Read a file and determines values
 		void createData(std::string filename);

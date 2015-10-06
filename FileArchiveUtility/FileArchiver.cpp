@@ -81,9 +81,8 @@ bool FileArchiver::exists(string filename) {
  * and then use the update function to add it to the database
  */
 void FileArchiver::insertNew(string filename, string comment) {
-    
-    timespec* ts = new timespec();
     string tmpZipFileName = (filename + ".zip");
+    timespec* ts = new timespec();
     
     // first check if the file exists, it would suck if it didn't
     fstream checkExists(filename.c_str(), fstream::in);
@@ -130,25 +129,7 @@ void FileArchiver::insertNew(string filename, string comment) {
     
     // create a tmp file on disk that is the compressed version of the file
     // being added, this will contain the data to be added to the blob field
-    ifstream inFile(filename.c_str(), fstream::binary);
-    gzFile outFile = gzopen(tmpZipFileName.c_str(), "wb");
-    
-    // again check files
-    if ( !inFile.good() || !outFile) {
-        cerr << "One of the files in compression is bad." << endl;
-        return;
-    }
-    
-    const int BUFFER_SIZE = 1024;
-    char inBuffer[BUFFER_SIZE];
-    
-    while ( !inFile.eof() ) {
-        inFile.read(inBuffer, BUFFER_SIZE);
-        gzwrite(outFile, inBuffer, inFile.gcount());
-    }
-    
-    inFile.close();
-    gzclose(outFile);
+    createZipFile(filename);
     
     // now grab all that compressed goodness and send it on it's way to the db
     char* compressedData;
@@ -261,15 +242,16 @@ void FileArchiver::retrieveVersion(int versionnum, string filename, string retri
 }
 
 int FileArchiver::getCurrentVersionNumber(string filename) {
-    // get the last row integer for the filename, that indicate the lastest version
+    currentRecord.getVersion();
 }
 
 size_t FileArchiver::getHashOfLastSaved(string filename) {
-    // simply return the hash value of the most recent version of a file
+    currentRecord.getRecentHash();
 }
 
-bool FileArchiver::getComment(string filename, int versionnum) {
+string FileArchiver::getComment(string filename, int versionnum) {
     // get the comment stored with the filename at row number versionnum
+    currentRecord.getCommentsVector()[versionnum];
 }
 
 vector<int> FileArchiver::getVersionInfo(string filename) {
@@ -283,8 +265,28 @@ void FileArchiver::setReference(string filename, int versionnum, string comment)
 }
 
 void FileArchiver::createZipFile(string filename) {
+    string tmpZipFileName = (filename + ".zip");
+    
     // zips the contents of the file as filename.zip so we can read it's bytes
     // and store it in the database
+    ifstream inFile(filename.c_str(), fstream::binary);
+    gzFile outFile = gzopen(tmpZipFileName.c_str(), "wb");
+    
+    // again check files
+    if ( !inFile.good() || !outFile) {
+        cerr << "One of the files in compression is bad." << endl;
+        return;
+    }
+    
+    char inBuffer[BUFFER_SIZE];
+    
+    while ( !inFile.eof() ) {
+        inFile.read(inBuffer, BUFFER_SIZE);
+        gzwrite(outFile, inBuffer, inFile.gcount());
+    }
+    
+    inFile.close();
+    gzclose(outFile);
 }
     
 size_t FileArchiver::hashFile(string filename) {
