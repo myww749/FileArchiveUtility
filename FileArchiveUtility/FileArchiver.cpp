@@ -172,7 +172,7 @@ void FileArchiver::insertNew(string filename, string comment) {
 #ifdef DEBUG
     
     // check if the data created generates a zip file correctly
-    string outTest = "DEBUGZIP.zip";
+    string outTest = filename + ".zip";
     ofstream outputZip(outTest.c_str(), ios::out | ios::binary);
     cout << "debug zip running" << endl;
     outputZip.write(compressedData, sizeof(compressedData));
@@ -181,19 +181,35 @@ void FileArchiver::insertNew(string filename, string comment) {
 #endif
     
     // delete the temporary zip file, all compression data should be saved
-    remove(tmpZipFileName.c_str()); // c function
+    QString filenameQString = QString::fromStdString(filename);
+    QString compressesDatQStr = QString::fromStdString(string(compressedData));
+    QString addToBlobTable      = "INSERT INTO blobtable VALUES (" + filenameQString + ", " + compressesDatQStr + ");";
     
-    QString addToBlobTable      = "INSERT INTO blobtable VALUES (" + QString::fromStdString(filename) + ", " + QString::fromStdString(string(compressedData)) + ");";
-    QString addToFilerec        = "";
+    // current the curhash and the ovhash are the same
+    QString addToFilerec        = "INSERT INTO filerec VALUES(" 
+                                    + filenameQString + ", " 
+                                    + hashFile(filename) + ", " 
+                                    + hashFile(filename) + ", " 
+                                    + 1 + ", "
+                                    + 1 + ", " 
+                                    + strlen(compressedData) + ", " 
+                                    + ts->tv_nsec + ", " 
+                                    + ts->tv_sec + ", " 
+                                    + QString::fromStdString(outTest) + ", " 
+                                    + QString::fromStdString(outTest) + ", " // mentions blobtable_tempname, not sure about this
+                                    + ts->tv_sec + ", " 
+                                    + ");";
+    
     QString addToCommentsTable  = "";
     QString addToFileBlkHashes  = "";
     QString addToVersionRec     = "";
     QString addToBlkTable       = "";
     
-    
     // update database
     
     // make sure memory is clear
+    delete[] leBuffer;
+    delete[] compressedData;
 }
 
 void FileArchiver::update(string filename, string comment) {
