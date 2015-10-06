@@ -11,25 +11,6 @@
 using namespace std;
 
 /*
- * Call back function used to handle data result set generator from the execution
- * of an SQL statement. Useful for SELECT statements, not really for INSERTS
- * and CREATES etc.
- */
-static int callback(void *data, int argc, char **argv, char **azColName) {
-    
-    int i;
-    fprintf(stderr, "%s: ", (const char*)data);
-
-    for ( i = 0; i < argc; i++ ) {
-        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-    }
-    
-    printf("\n");
-    
-    return 0;
-}
-
-/*
  * Everything needs to be ported over to MySQL, using a web host
  * or it can be done on localhost, a hosted database would make it easier
  * for all team members to get access to the database,
@@ -72,6 +53,10 @@ bool FileArchiver::differs(string filename) {
 }
 
 bool FileArchiver::exists(string filename) {
+    
+    // create query and execute it checking if there are any rows returned
+    QString query = "SELECT filename FROM filerec;";
+    
     
     return true;
 }
