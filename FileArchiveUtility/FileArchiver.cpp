@@ -55,10 +55,21 @@ bool FileArchiver::differs(string filename) {
 bool FileArchiver::exists(string filename) {
     
     // create query and execute it checking if there are any rows returned
-    QString queryString = "SELECT filename FROM filerec;";
+    string queryString = "SELECT " + filename + " FROM filerec;";
+    QString qQueryString;
+    qQueryString.append(queryString.c_str());
     
     QSqlQuery query(db);
-    query.exec(queryString);
+    query.exec(qQueryString);
+    
+    while ( query.next() ) {
+        QString name = query.value(0).toString();
+        
+        if ( name == "" || name == NULL)
+            return false;
+        
+        qDebug() << name;
+    }
     
     return true;
 }
