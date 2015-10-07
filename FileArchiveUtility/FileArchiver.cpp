@@ -322,11 +322,11 @@ void FileArchiver::retrieveVersion(int versionnum, string filename, string retri
     }
     
     // retrievetofilename
-    
+    retrievetofilename = string(mtConvert.str() + "_" + mtnConvert.str() + "_" + filename).c_str();
     
     // make sure to decompress
     gzFile zipFile = gzopen(string(filename + "_" + mtConvert.str() + "_" + mtnConvert.str() + ".zip").c_str(), "rb");
-    ofstream outFile(string(mtConvert.str() + "_" + mtnConvert.str() + "_" + filename).c_str() , ios::out);
+    ofstream outFile(retrievetofilename.c_str(), ios::out);
     
     if ( !zipFile || outFile.fail() ) {
         cerr << "Could not load zip file or could not create output file." << endl;
@@ -362,6 +362,31 @@ vector<int> FileArchiver::getVersionInfo() {
 
 void FileArchiver::setReference(string filename, int versionnum, string comment) {
     // sets the file which acts as the original
+    size_t newHash = hashFile(filename);
+    char* newCompressedData = NULL;
+    
+    // get the data for the new reference file
+    ifstream inFile(filename.c_str(), ios::in);
+    gzFile outZipFile = gzopen(string(filename + ".zip").c_str(), "wb");
+    
+    // check files
+    if ( !outZipFile || inFile.fail() ) {
+        cerr << "Could not create zip file or read input file" << endl;
+        return;
+    }
+    
+    char buffer[BUFFER_SIZE];
+    int numRead = 0;
+    while ( !inFile.eof() ) {
+        
+    }
+    
+    // TODO: gives the correct values
+    QString addReferenceQueryStr = "INSERT INTO blktable (hash, data) VALUES () WHERE version = 0;";
+    
+    currentRecord.setRefnumber(newHash);
+    
+    QSqlQuery addNewReferenceData(db);
     
     // file changes are stored later on in compress format and are added on
 }
