@@ -323,7 +323,24 @@ void FileArchiver::retrieveVersion(int versionnum, string filename, string retri
     
     // retrievetofilename
     
+    
     // make sure to decompress
+    gzFile zipFile = gzopen(string(filename + "_" + mtConvert.str() + "_" + mtnConvert.str() + ".zip").c_str(), "rb");
+    ofstream outFile(string(mtConvert.str() + "_" + mtnConvert.str() + "_" + filename).c_str() , ios::out);
+    
+    if ( !zipFile || outFile.fail() ) {
+        cerr << "Could not load zip file or could not create output file." << endl;
+        return;
+    }
+    
+    char buffer[BUFFER_SIZE];
+    int num_read = 0;
+    while ( (num_read =  gzread(zipFile, buffer, BUFFER_SIZE)) > 0 ) {
+        outFile.write(buffer, num_read);
+    }
+    
+    gzclose(zipFile);
+    outFile.close();
 }
 
 int FileArchiver::getCurrentVersionNumber() {
